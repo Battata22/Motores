@@ -37,6 +37,9 @@ public abstract class BaseCharacter : MonoBehaviour
     DOTControl _myDOTControl;
     StaminaControl _myStaminaControl;
 
+    public delegate void VoidDelegate();
+    public VoidDelegate _myAttack, _myChargeAttack, _myBlock;
+
     protected virtual void Awake()
     {
         _rb = GetComponent<Rigidbody>();
@@ -74,9 +77,18 @@ public abstract class BaseCharacter : MonoBehaviour
 
     protected virtual void Run() { }
 
-    protected virtual void Attack() { }
+    protected virtual void SwordNAttack() { }
+    protected virtual void SwordNCttack() { }
+    protected virtual void SwordBlock() { }
 
-    protected virtual void Block() { }
+    protected virtual void SwAndShielsNAttack() { }
+    protected virtual void SwAndShielsCAttack() { }
+    protected virtual void SwAndShielsBlock() { }
+
+    protected virtual void GreatSwordNAttack() { }
+    protected virtual void GreatSwordCAttack() { }
+    protected virtual void GreatSwordNBlock() { }
+
 
     //Identificador de golpe
     public enum HitArea
@@ -84,5 +96,12 @@ public abstract class BaseCharacter : MonoBehaviour
         Head,
         Chest,
         Legs
+    }
+
+    protected enum Weapon
+    {
+        GreatSword,
+        Sword,
+        SwordAndShield      
     }
 }

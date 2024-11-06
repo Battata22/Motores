@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Seller : MonoBehaviour
+public class Seller : BaseCharacter
 {
     public int money;
 

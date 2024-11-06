@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using PlayerInput;
 
 public class Player : BaseCharacter
 {
@@ -34,5 +35,10 @@ public class Player : BaseCharacter
     public void UsePotion()
     {
 
+    }
+
+    public void Kick()
+    {
+        Debug.Log("Saliendo de modo Pelea");
     }
 }
