@@ -4,7 +4,7 @@ using UnityEngine;
 
 
 [RequireComponent(typeof(Rigidbody))]
-public abstract class BaseCharacter : MonoBehaviour
+public abstract class BaseCharacter : MonoBehaviour , IKickable
 {
     //Basic
     protected string _name; 
@@ -22,10 +22,15 @@ public abstract class BaseCharacter : MonoBehaviour
     //armor
     protected int _helmet, _chestPlate, _boots;
 
+    //Weapon
+    [SerializeField] protected Weapon _currentWeapon;
+
     //Damage in parts
     private bool _isHeadDamage, _isChestDamage, _areLegsDamage;
 
     protected bool _blocking;
+
+    protected bool _inCombat = false;
 
     //Effects
     public bool bleading, poisoned;
@@ -40,6 +45,8 @@ public abstract class BaseCharacter : MonoBehaviour
     public delegate void VoidDelegate();
     public VoidDelegate _myAttack, _myChargeAttack, _myBlock;
 
+    [SerializeField] protected bool _canMove = true;
+
     protected virtual void Awake()
     {
         _rb = GetComponent<Rigidbody>();
@@ -47,9 +54,15 @@ public abstract class BaseCharacter : MonoBehaviour
         _myDOTControl = new DOTControl(this);
         _myHealthSystem = new HealthSystem(this);
         _myStaminaControl = new StaminaControl(this);
+        SetWeapon(Weapon.Sword);
 
         _hp = _maxHp;
         stamina = _maxStamina;
+    }
+
+    protected virtual void Start()
+    {
+        GameManager.Instance.OnCombatEnter += EnterCombat;
     }
 
     //ahora toma un int
@@ -78,7 +91,7 @@ public abstract class BaseCharacter : MonoBehaviour
     protected virtual void Run() { }
 
     protected virtual void SwordNAttack() { }
-    protected virtual void SwordNCttack() { }
+    protected virtual void SwordCAttack() { }
     protected virtual void SwordBlock() { }
 
     protected virtual void SwAndShielsNAttack() { }
@@ -87,8 +100,57 @@ public abstract class BaseCharacter : MonoBehaviour
 
     protected virtual void GreatSwordNAttack() { }
     protected virtual void GreatSwordCAttack() { }
-    protected virtual void GreatSwordNBlock() { }
+    protected virtual void GreatSwordBlock() { }
 
+
+    protected abstract void EnterCombat();
+    protected abstract void ExitCombat();
+
+
+    public virtual void Kick()
+    {
+        Debug.Log($"{gameObject.name} use Kick");
+        //Debug.Log("Saliendo de modo Pelea");
+        GameManager.Instance.ExitCombat();
+    }
+
+    public void GetKicked()
+    {
+        Debug.Log($"{gameObject.name} Recive a kick");
+        _rb.AddForce(-transform.forward * 10, ForceMode.Impulse);
+    }
+
+    public virtual void SetWeapon(Weapon newWeapon)
+    {
+
+        _currentWeapon = newWeapon;
+        switch (_currentWeapon)
+        {
+            case Weapon.Sword:
+                _myAttack = SwordNAttack;
+                _myChargeAttack = SwordCAttack;
+                _myBlock = SwordBlock;
+                break;
+            case Weapon.GreatSword:
+                _myAttack = SwAndShielsNAttack;
+                _myChargeAttack = SwAndShielsCAttack;
+                _myBlock = SwAndShielsBlock;
+                break;
+            case Weapon.SwordAndShield:
+                _myAttack = GreatSwordNAttack;
+                _myChargeAttack = GreatSwordCAttack;
+                _myBlock = GreatSwordBlock;
+                break;
+        }
+        Debug.Log($"Current Weapon: {_currentWeapon}");
+
+    }
+
+    private void OnDestroy()
+    {
+        GameManager.Instance.OnCombatEnter -= EnterCombat;
+        GameManager.Instance.OnCombatExit -= ExitCombat;
+    }
 
     //Identificador de golpe
     public enum HitArea
@@ -98,7 +160,7 @@ public abstract class BaseCharacter : MonoBehaviour
         Legs
     }
 
-    protected enum Weapon
+    public enum Weapon
     {
         GreatSword,
         Sword,

@@ -23,20 +23,8 @@ public class CamDistance : MonoBehaviour
         _rayDistance = (transform.position - _lookingAt.position).magnitude;
     }
 
-    //private IEnumerator Start()
-    //{
-
-
-    //    yield return new WaitForEndOfFrame();
-    //    _cam = GameManager.Instance.Camera;
-    //    //_rayDistance = (new Vector3(transform.position.x, transform.position.y + 2, transform.position.z) - _lookingAt.position).magnitude;
-    //}
-
     private void Update()
     {
-        //_origin = new Vector3(transform.position.x, transform.position.y + 2, transform.position.z);
-        //guardar pos dle pj, en teoria pos del mesh pero no queria usar mesh de una porque soy especial
-
         //direccion del ray
         Vector3 _ray = (_lookingAt.position - transform.position).normalized;
 

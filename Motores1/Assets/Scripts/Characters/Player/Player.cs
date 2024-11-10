@@ -5,6 +5,8 @@ using PlayerInput;
 
 public class Player : BaseCharacter
 {
+    [SerializeField] GameObject _mesh;
+
     public int money;
     public bool blueTeam;
 
@@ -19,26 +21,45 @@ public class Player : BaseCharacter
     private void Update()
     {
         myControl.FakeUpdate();
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            TakeDamage(10);
-        }
     }
 
     public override void Movement(float xAxis, float zAxis)
     {
         //base.Movement();
+        if (!_canMove) return;
         var dir = (transform.right * xAxis) + (transform.forward * zAxis).normalized;
         _rb.position += dir * _speed * Time.deltaTime;
     }
 
     public void UsePotion()
     {
-
+        Debug.Log($"<color=green> Player Use Potion </color>");
     }
 
-    public void Kick()
+    public override void Kick()
     {
-        Debug.Log("Saliendo de modo Pelea");
+        var pos = new Vector3(transform.position.x, transform.position.y + 1f, transform.position.z);
+        if (Physics.Raycast(pos, transform.forward, out RaycastHit hit) && hit.transform.TryGetComponent<IKickable>(out IKickable target))
+        {
+            target.GetKicked();
+
+        }
+        base.Kick();
+    }
+
+    protected override void EnterCombat()
+    {
+        _mesh.SetActive(false);
+
+        GameManager.Instance.OnCombatEnter -= EnterCombat;
+        GameManager.Instance.OnCombatExit += ExitCombat;
+    }
+
+    protected override void ExitCombat()
+    {
+        _mesh.SetActive(true);
+
+        GameManager.Instance.OnCombatExit -= ExitCombat;
+        GameManager.Instance.OnCombatEnter += EnterCombat;
     }
 }

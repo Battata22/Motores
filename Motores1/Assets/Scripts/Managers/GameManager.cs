@@ -28,12 +28,15 @@ public class GameManager : MonoBehaviour
 
     public Player Player;
     public Enemy Enemy;
+    public CombatCanvas CombatCanvas;
 
     public delegate void VoidDelegate();
     public event VoidDelegate OnCombatEnter = delegate { }, OnCombatExit = delegate { };
     public void EnterCombat()
     {
+        //CombatCanvas.gameObject.SetActive(true);
         OnCombatEnter();
+        
         //mover camara a zoom combate
         //lockear todos los enemigos
         //lockear player
@@ -42,10 +45,13 @@ public class GameManager : MonoBehaviour
 
     public void ExitCombat()
     {
+        CombatCanvas.gameObject.SetActive(false);
         OnCombatExit();
         //desactivar canvas de combate
         //liberar player
         //liberar enemigos
         //mover cam a zoom normal
     }
+
+    
 }

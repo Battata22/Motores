@@ -30,4 +30,16 @@ public class Seller : BaseCharacter
     {
 
     }
+
+    protected override void EnterCombat()
+    {
+        GameManager.Instance.OnCombatEnter -= EnterCombat;
+        GameManager.Instance.OnCombatExit += ExitCombat;
+    }
+
+    protected override void ExitCombat()
+    {
+        GameManager.Instance.OnCombatExit -= ExitCombat;
+        GameManager.Instance.OnCombatEnter += EnterCombat;
+    }
 }

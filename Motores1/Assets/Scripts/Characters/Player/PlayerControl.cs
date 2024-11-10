@@ -34,19 +34,32 @@ namespace PlayerInput
             if (horizontal != 0 || vertical != 0)
                 player.Movement(horizontal, vertical);
 
+            if (Input.GetKeyDown(KeyCode.Alpha1))
+            {
+                player.SetWeapon(Player.Weapon.Sword);
+            }
+            if (Input.GetKeyDown(KeyCode.Alpha2))
+            {
+                player.SetWeapon(Player.Weapon.SwordAndShield);
+            }
+            if (Input.GetKeyDown(KeyCode.Alpha3))
+            {
+                player.SetWeapon(Player.Weapon.GreatSword);
+            }
+
             if (Input.GetKeyDown(usePotion))
             {
-                Debug.Log($"<color=green> Player Use Potion </color>");
+                
                 player.UsePotion();
             }
             if (Input.GetMouseButtonDown(0))
             {
-                //player.Attack();
+                player._myAttack();
                 Debug.Log($"<color=red> Player Attack </color>");
             }
             if (Input.GetMouseButtonDown(1))
             {
-                //player.Block()
+                player._myBlock();
                 Debug.Log($"<color=blue> Player Guard Up </color>");
             }
             if (Input.GetMouseButtonUp(1))
@@ -57,7 +70,7 @@ namespace PlayerInput
             if (Input.GetKeyDown(kick))
             {
                 player.Kick();
-                Debug.Log($"<color=orange> Player Kick </color>");
+                //Debug.Log($"<color=orange> Player Kick </color>");
             }
             if (Input.GetKeyDown(sprint))
             {
