@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class CamRotation : MonoBehaviour
@@ -11,10 +12,23 @@ public class CamRotation : MonoBehaviour
     [SerializeField] Transform _playerOrientation;
     [SerializeField] Transform _meshOrientation;
 
+    protected delegate void VoideDelegate();
+    VoideDelegate _rotateCam, _rotateMesh, _mouseInput;
+
+    private void Awake()
+    {
+        _rotateCam = RotateCam;
+        _rotateMesh = RotateMesh;
+        _mouseInput = GetMouseInput;
+    }
+
     private void Start()
     {
+        GameManager.Instance.CamRotation = this;
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
+
+        GameManager.Instance.OnCombatEnter += DisableRotation;
     }
 
     private void Update()
@@ -33,26 +47,91 @@ public class CamRotation : MonoBehaviour
         //    SensGuardarJSON();
         //} 
         #endregion
-        _mouseX = Input.GetAxis("Mouse X") * Time.fixedDeltaTime * 90f;
-        _mouseY = Input.GetAxis("Mouse Y") * Time.fixedDeltaTime * 90f;
 
-        _yRotation += _mouseX;
-        _xRotation -= _mouseY;
+        _mouseInput();
 
-        _xRotation = Mathf.Clamp(_xRotation, -89f, 89f);
+        //_mouseX = Input.GetAxis("Mouse X") * Time.fixedDeltaTime * 90f;
+        //_mouseY = Input.GetAxis("Mouse Y") * Time.fixedDeltaTime * 90f;
+
+        //if (_mouseX != 0 || _mouseY != 0)
+        //{
+        //    _yRotation += _mouseX;
+        //    _xRotation -= _mouseY;
+        //}
+
+        //_xRotation = Mathf.Clamp(_xRotation, -89f, 89f);
 
     }
 
     private void FixedUpdate()
     {
-        transform.rotation = Quaternion.Euler(_xRotation, _yRotation, 0);
+        //transform.rotation = Quaternion.Euler(_xRotation, _yRotation, 0);
+        _rotateCam();
+
     }
 
     private void LateUpdate()
     {
-        _playerOrientation.rotation = Quaternion.Euler(0, _yRotation, 0);
+        _rotateMesh();
+        //_playerOrientation.rotation = Quaternion.Euler(0, _yRotation, 0);
         //if (_meshOrientation != null)
         //    _meshOrientation.rotation = Quaternion.Euler(_xRotation, _yRotation, 0);
+    }
+
+    void GetMouseInput()
+    {
+        _mouseX = Input.GetAxis("Mouse X") * Time.fixedDeltaTime * 90f;
+        _mouseY = Input.GetAxis("Mouse Y") * Time.fixedDeltaTime * 90f;
+
+        if (_mouseX != 0 || _mouseY != 0)
+        {
+            _yRotation += _mouseX;
+            _xRotation -= _mouseY;
+        }
+
+        _xRotation = Mathf.Clamp(_xRotation, -89f, 89f);
+    }
+
+    void RotateCam()
+    {
+        transform.rotation = Quaternion.Euler(_xRotation, _yRotation, 0);
+    }
+
+    void RotateMesh()
+    {
+        _playerOrientation.rotation = Quaternion.Euler(0, _yRotation, 0);
+    }
+
+    void DisableRotation()
+    {
+        _rotateCam = delegate { };
+        _rotateMesh = delegate { };
+        _mouseInput = delegate { };
+
+        GameManager.Instance.OnCombatEnter -= DisableRotation;
+        GameManager.Instance.OnCombatExit += EnableRotation;
+    }
+
+    void EnableRotation()
+    {
+        _mouseInput = GetMouseInput;
+        _rotateCam = RotateCam;
+        _rotateMesh = RotateMesh;
+
+        GameManager.Instance.OnCombatExit -= EnableRotation;
+        GameManager.Instance.OnCombatEnter += DisableRotation;
+    }
+
+    public void LookAtMe(Transform target)
+    {
+        _playerOrientation.LookAt(target.position + new Vector3(0f, _playerOrientation.position.y, 0f), Vector3.up);
+        transform.LookAt(target.position + new Vector3(0f, transform.position.y, 0f), Vector3.up);
+    }
+
+    private void OnDestroy()
+    {
+        GameManager.Instance.OnCombatExit -= EnableRotation;
+        GameManager.Instance.OnCombatEnter -= DisableRotation;
     }
 
     //private void SensGuardarJSON()

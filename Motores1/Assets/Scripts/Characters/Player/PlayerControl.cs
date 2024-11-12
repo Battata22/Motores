@@ -18,6 +18,7 @@ namespace PlayerInput
         public int block = 1;
         public KeyCode kick = KeyCode.V;
         public KeyCode sprint = KeyCode.LeftShift;
+        public KeyCode pickUp = KeyCode.LeftControl;
 
 
 
@@ -32,19 +33,19 @@ namespace PlayerInput
             var vertical = Input.GetAxisRaw("Vertical");
 
             if (horizontal != 0 || vertical != 0)
-                player.Movement(horizontal, vertical);
+                player._playerMovemente(horizontal, vertical);
 
             if (Input.GetKeyDown(KeyCode.Alpha1))
             {
-                player.SetWeapon(Player.Weapon.Sword);
+                player.SetWeapon(Weapon.WeaponType.Sword);
             }
             if (Input.GetKeyDown(KeyCode.Alpha2))
             {
-                player.SetWeapon(Player.Weapon.SwordAndShield);
+                player.SetWeapon(Weapon.WeaponType.SwordAndShield);
             }
             if (Input.GetKeyDown(KeyCode.Alpha3))
             {
-                player.SetWeapon(Player.Weapon.GreatSword);
+                player.SetWeapon(Weapon.WeaponType.GreatSword);
             }
 
             if (Input.GetKeyDown(usePotion))
@@ -74,13 +75,17 @@ namespace PlayerInput
             }
             if (Input.GetKeyDown(sprint))
             {
-                player.running = true;
+                player.RunningState(true);
                 Debug.Log($"<color=purple> Player Running </color>");
             }
             if (Input.GetKeyUp(sprint))
             {
-                player.running = false;
+                player.RunningState(false);
                 Debug.Log($"<color=purple> Player Walking </color>");
+            }            
+            if (Input.GetKeyUp(pickUp))
+            {
+                player.CheckPickUp();
             }
         }
     }

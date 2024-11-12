@@ -29,6 +29,7 @@ public class GameManager : MonoBehaviour
     public Player Player;
     public Enemy Enemy;
     public CombatCanvas CombatCanvas;
+    public CamRotation CamRotation;
 
     public delegate void VoidDelegate();
     public event VoidDelegate OnCombatEnter = delegate { }, OnCombatExit = delegate { };

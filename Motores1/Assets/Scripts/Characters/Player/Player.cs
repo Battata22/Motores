@@ -10,20 +10,25 @@ public class Player : BaseCharacter
     public int money;
     public bool blueTeam;
 
+    public delegate void VoidDelegateFloat2(float a, float b);
+    public VoidDelegateFloat2 _playerMovemente;
+
     PlayerControl myControl;
 
     protected override void Awake()
     {
         base.Awake();
+        _playerMovemente = Movement;
         myControl = new PlayerControl(this);
     }
 
     private void Update()
     {
         myControl.FakeUpdate();
+        _myStaminaControl.FakeUpdate(ref stamina);
     }
 
-    public override void Movement(float xAxis, float zAxis)
+    protected void Movement(float xAxis, float zAxis)
     {
         //base.Movement();
         if (!_canMove) return;
@@ -47,9 +52,16 @@ public class Player : BaseCharacter
         base.Kick();
     }
 
+    public void RunningState(bool coso)
+    {
+        running = coso;
+    }
+
     protected override void EnterCombat()
     {
         _mesh.SetActive(false);
+        _playerMovemente = delegate { };
+        inCombat = true;
 
         GameManager.Instance.OnCombatEnter -= EnterCombat;
         GameManager.Instance.OnCombatExit += ExitCombat;
@@ -58,8 +70,22 @@ public class Player : BaseCharacter
     protected override void ExitCombat()
     {
         _mesh.SetActive(true);
+        _playerMovemente = Movement;
+        inCombat = false;
 
         GameManager.Instance.OnCombatExit -= ExitCombat;
         GameManager.Instance.OnCombatEnter += EnterCombat;
+    }
+
+    public void CheckPickUp()
+    {
+        Collider[] objects = Physics.OverlapSphere(transform.position, 0.25f);
+        foreach (Collider collider in objects)
+        {
+            if(collider.gameObject.TryGetComponent<IPickeable>(out IPickeable pickeable))
+            {
+                pickeable.PickUp(this);
+            }
+        }
     }
 }
