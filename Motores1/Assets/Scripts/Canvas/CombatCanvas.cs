@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class CombatCanvas : MonoBehaviour
 {
-    [SerializeField] RawImage[] _attackAreas; 
+    [SerializeField] RawImage[] _attackAreas, _centros; 
 
     private void Start()
     {
@@ -22,7 +22,13 @@ public class CombatCanvas : MonoBehaviour
         {
             img.gameObject.SetActive(false);
         }
+        foreach (var img in _centros)
+        {
+            img.gameObject.SetActive(false);
+        }
+
         _attackAreas[(int)attackDir].gameObject.SetActive(true);
+        _centros[(int)attackDir].gameObject.SetActive(true);
         //direccion de ataque 
         //player lo saaca del GM
         //Si necesitamos comportamiento de recover necesita enemigo que llamo al atque, lo podes pedir por parametro en esta funcion
@@ -44,6 +50,10 @@ public class CombatCanvas : MonoBehaviour
         GameManager.Instance.OnCombatEnter += EnterCombat;
 
         foreach(var image in _attackAreas)
+        {
+            image.enabled = false;
+        }
+        foreach (var image in _centros)
         {
             image.enabled = false;
         }

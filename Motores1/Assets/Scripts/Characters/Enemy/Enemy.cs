@@ -42,7 +42,7 @@ public abstract class Enemy : BaseCharacter
         if (!inCombat && (Time.time - _lastCombatTime > _enterCombatCD) && Vector3.SqrMagnitude(_target.transform.position - transform.position) <= (_attackDist * _attackDist))
         {
             GameManager.Instance.EnterCombat();
-            GameManager.Instance.CamRotation.LookAtMe(this.transform);
+            GameManager.Instance.CamRotation.LookAtMe(transform);
         }
         if (!(Vector3.SqrMagnitude(_target.transform.position - transform.position) <= (_attackDist * _attackDist)))
             ChaseTarget();
@@ -90,6 +90,8 @@ public abstract class Enemy : BaseCharacter
 
     protected override void EnterCombat()
     {
+        GameManager.Instance.enemyInCombat = this;
+
         Debug.Log($"{gameObject.name} Enter combat mode");
         _canMove = false;
         inCombat = true;
@@ -100,10 +102,15 @@ public abstract class Enemy : BaseCharacter
 
         transform.LookAt(_target.transform);
 
+        //GameManager.Instance.mouseCenterGO.SetActive(true);
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true; ;
     }
 
     protected override void ExitCombat()
     {
+        GameManager.Instance.enemyInCombat = null;
+
         Debug.Log($"{gameObject.name} Exit combat mode");
         _canMove = true;
         inCombat = false;  
@@ -111,7 +118,11 @@ public abstract class Enemy : BaseCharacter
         GameManager.Instance.OnCombatExit -= ExitCombat;
         GameManager.Instance.OnCombatEnter += EnterCombat;
 
-        _lastCombatTime = Time.time;    
+        _lastCombatTime = Time.time;
+
+        //GameManager.Instance.mouseCenterGO.SetActive(false);
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
     }
 
     protected void ChaseTarget()

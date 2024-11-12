@@ -22,7 +22,7 @@ public abstract class BaseCharacter : MonoBehaviour, IKickable
     protected Rigidbody _rb; //agregado
 
     //attack
-    [SerializeField] protected float _damage, _attackSpeed;
+    [SerializeField] public float _damage, _attackSpeed;
     protected float _lastAttack = -1;
     protected bool _heavyAttack;
     //armor

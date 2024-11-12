@@ -30,6 +30,8 @@ public class GameManager : MonoBehaviour
     public Enemy Enemy;
     public CombatCanvas CombatCanvas;
     public CamRotation CamRotation;
+    public GameObject mouseCenterGO;
+    public Enemy enemyInCombat;
 
     [SerializeField] public float potionHealAmount;
     [SerializeField] public float poisonDamage;
