@@ -7,6 +7,9 @@ public class StaminaControl
     BaseCharacter _myOwner;
     float _regenRate, _maxStamina;
 
+    public delegate void VoidDelegateBool(bool b);
+    public event VoidDelegateBool OnOutOfBreath = delegate { };
+
     //float _stamina;
     bool exausted;
 
@@ -19,11 +22,7 @@ public class StaminaControl
 
     public void FakeUpdate(ref float ownerStamina)
     {
-        if(Input.GetKeyUp(KeyCode.Space)) 
-        {
-            DecreseStamina(ref ownerStamina, 40);
-        }
-        Debug.Log("Stamina Update");
+        //Debug.Log("Stamina Update");
         if (ownerStamina < _maxStamina && !_myOwner.running)
             StaminaRegen(ref ownerStamina);
     }
@@ -33,11 +32,16 @@ public class StaminaControl
     {
         ownerStamina -= staminaCost;
         Debug.Log($"Estamina reducida en {staminaCost} estamina final {ownerStamina}");
+        if(ownerStamina < 0)
+        {
+            OutOfBreath();
+            ownerStamina = 0;
+        }
     }
 
     private void StaminaRegen(ref float ownerStamina)
     {
-        //Debug.Log("estamina regen llamado");
+        Debug.Log("estamina regen llamado");
         float inCombatMult;
         if (_myOwner.inCombat)
             inCombatMult = 0.3f;
@@ -49,11 +53,17 @@ public class StaminaControl
         {
             ownerStamina = _maxStamina;
             Debug.Log("<color=green> Estamina LLena </color>");
+            _myOwner.outOfBreath = false;
         }
     }
 
     void OutOfBreath()
     {
+        // Llamar cuando llegas a 0
+        // Set out of breath
+        //evita cuanquier accion que requiera estamina
+        OnOutOfBreath(false);
+        _myOwner.outOfBreath = true;
 
     }
 }

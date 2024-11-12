@@ -362,17 +362,25 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _maxHp: 100
   _maxStamina: 100
-  _speed: 5
   _staminaRegenRate: 20
+  _speed: 5
+  _runningSpeed: 10
+  _runningStmCost: 10
   _damage: 12
   _attackSpeed: 2
   _currentWeapon: 1
   bleading: 0
   poisoned: 0
+  outOfBreath: 0
+  potions: 0
   _canMove: 1
   _mesh: {fileID: 2018190609161203008}
   money: 100
   blueTeam: 1
+  dev_damagePlayer: 100
+  dev_attackDirection: 0
+  dev_armorEquiped: 000000000100000002000000
+  dev_armorQuality: 000000000000000000000000
 --- !u!136 &1144143577464353677
 CapsuleCollider:
   m_ObjectHideFlags: 0

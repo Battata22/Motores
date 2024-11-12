@@ -35,25 +35,26 @@ namespace PlayerInput
             if (horizontal != 0 || vertical != 0)
                 player._playerMovemente(horizontal, vertical);
 
-            if (Input.GetKeyDown(KeyCode.Alpha1))
-            {
-                player.SetWeapon(Weapon.WeaponType.Sword);
-            }
-            if (Input.GetKeyDown(KeyCode.Alpha2))
-            {
-                player.SetWeapon(Weapon.WeaponType.SwordAndShield);
-            }
-            if (Input.GetKeyDown(KeyCode.Alpha3))
-            {
-                player.SetWeapon(Weapon.WeaponType.GreatSword);
-            }
+            #region Debug Set Weapon
+            //if (Input.GetKeyDown(KeyCode.Alpha1))
+            //{
+            //    player.SetWeapon(Weapon.WeaponType.Sword);
+            //}
+            //if (Input.GetKeyDown(KeyCode.Alpha2))
+            //{
+            //    player.SetWeapon(Weapon.WeaponType.SwordAndShield);
+            //}
+            //if (Input.GetKeyDown(KeyCode.Alpha3))
+            //{
+            //    player.SetWeapon(Weapon.WeaponType.GreatSword);
+            //} 
+            #endregion            
 
             if (Input.GetKeyDown(usePotion))
-            {
-                
+            {               
                 player.UsePotion();
             }
-            if (Input.GetMouseButtonDown(0))
+            if (Input.GetMouseButtonDown(0) && !player.outOfBreath)
             {
                 player._myAttack();
                 Debug.Log($"<color=red> Player Attack </color>");

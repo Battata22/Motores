@@ -7,7 +7,7 @@ public class ArmorControl
     BaseCharacter _myOwner;
 
     //int _armor;
-    private int _incomingDmg;
+    public float _headArmor, _chestArmor, _legsArmor;
 
     public ArmorControl(BaseCharacter myOwner)
     {
@@ -16,9 +16,73 @@ public class ArmorControl
         //_incomingDmg = incomingDmg;
     }
 
-    public int ReduceDamag()
+    public float CalcArmor(float rawDamage, BaseCharacter.AttackDirectionList attackDir)
     {
-        int result = 0;
+        Debug.Log("Llamado calculo de armadura");
+        float result = 0;
+
+        switch (attackDir)
+        {
+            case BaseCharacter.AttackDirectionList.UpLeft:
+            case BaseCharacter.AttackDirectionList.UpCenter:
+            case BaseCharacter.AttackDirectionList.UpRight:
+                CalcHelmetArmor(rawDamage);
+                break;
+            case BaseCharacter.AttackDirectionList.MidLeft:
+            case BaseCharacter.AttackDirectionList.MidCenter:
+            case BaseCharacter.AttackDirectionList.MidRight:
+                CalcChestArmor(rawDamage); 
+                break;
+            case BaseCharacter.AttackDirectionList.LowLeft:
+            case BaseCharacter.AttackDirectionList.LowCenter:
+            case BaseCharacter.AttackDirectionList.LowRight:
+                CalcLegsArmor(rawDamage);
+                break;
+        }
+
         return result;
+    }
+
+    private float CalcHelmetArmor(float rawDamage)
+    {
+        float result = rawDamage;
+        result -= rawDamage * _chestArmor * 0.1f;
+        Debug.Log($"Armadura de Cabeza calculada: Daño crudo {rawDamage} Daño Reducido {result}");
+        return result;
+    }
+
+    private float CalcChestArmor(float rawDamage)
+    {
+        float result = rawDamage;
+        result -= rawDamage * _chestArmor * 0.1f;
+        Debug.Log($"Armadura de Pecho calculada: Daño crudo {rawDamage} Daño Reducido {result}");
+        return result;
+    }
+
+    private float CalcLegsArmor(float rawDamage)
+    {
+        float result = rawDamage;
+        result -= rawDamage * _chestArmor * 0.1f;
+        Debug.Log($"Armadura de Piernas calculada: Daño crudo {rawDamage} Daño Reducido {result}");
+        return result;
+    }
+
+    public void SetArmor(ArmorPice.ArmorType armorType, ArmorPice.ArmorQuality armorQuality)
+    {
+        switch(armorType)
+        {
+            case ArmorPice.ArmorType.Helmet:
+                _headArmor = (int)armorQuality;
+                Debug.Log($"Casco equipado {_headArmor}");
+                break;
+            case ArmorPice.ArmorType.Chestplate:
+                _chestArmor = (int)armorQuality;
+                Debug.Log($"Pechera equipado {_chestArmor}");
+                break;
+            case ArmorPice.ArmorType.Leggings:
+                _legsArmor = (int)armorQuality;
+                Debug.Log($"Pantalones equipado {_legsArmor}");
+                break;
+        }
     }
 }

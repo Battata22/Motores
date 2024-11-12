@@ -31,6 +31,10 @@ public class GameManager : MonoBehaviour
     public CombatCanvas CombatCanvas;
     public CamRotation CamRotation;
 
+    [SerializeField] public float potionHealAmount;
+    [SerializeField] public float poisonDamage;
+    [SerializeField] public float bleedDamage;
+
     public delegate void VoidDelegate();
     public event VoidDelegate OnCombatEnter = delegate { }, OnCombatExit = delegate { };
     public void EnterCombat()

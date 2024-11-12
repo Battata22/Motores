@@ -6,7 +6,6 @@ public class HealthSystem
 {
     BaseCharacter _myOwner;
 
-    private int _hp;
     //private int _incomingDmg;
 
     public HealthSystem(BaseCharacter newOwner)
@@ -16,20 +15,34 @@ public class HealthSystem
         //_incomingDmg = newDamage;
     }
 
-    public int CalcDamage(int rawDamage)
-    {
-        //llamar a armadura
-        int resultDmg = rawDamage;
+    
 
-        return resultDmg;
+    public void CalcDamage(ref float ownerHp, float rawDamage, ArmorControl armorCtrl, BaseCharacter.AttackDirectionList attackDir)
+    {
+        float resultHp = rawDamage;
+        //llamar a armadura
+        resultHp -= armorCtrl.CalcArmor(rawDamage, attackDir);
+
+        ownerHp = resultHp;
     }
 
-    public int CalcHeal(int healAmount)
+    /// <summary>
+    /// USAR SOLO PARA DAMAGE OVER TIME
+    /// </summary>
+    /// <param name="ownerHp"></param>
+    public void CalcDamage(ref float ownerHp, float damage)
+    {
+        float resultDmg = damage * Time.deltaTime;
+
+        ownerHp -= resultDmg;
+    }
+
+    public void CalcHeal(ref float ownerHp ,float healAmount)
     {
         //Va a haber buff o debuff de healing?
-        int resultHeal = healAmount;
+        float resultHeal = healAmount;
 
-        return resultHeal;
+        ownerHp += resultHeal;
     }
 
     void Death()

@@ -23,6 +23,9 @@ public class CombatCanvas : MonoBehaviour
             img.gameObject.SetActive(false);
         }
         _attackAreas[(int)attackDir].gameObject.SetActive(true);
+        //direccion de ataque 
+        //player lo saaca del GM
+        //Si necesitamos comportamiento de recover necesita enemigo que llamo al atque, lo podes pedir por parametro en esta funcion
     }
 
     void EnterCombat()
