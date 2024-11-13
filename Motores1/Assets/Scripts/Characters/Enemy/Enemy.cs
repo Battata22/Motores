@@ -15,6 +15,8 @@ public abstract class Enemy : BaseCharacter
 
     private void Update()
     {
+        _myLifeSaver.FakeUpdate();
+
         if (inCombat && Time.time - _lastAttack > _attackSpeed)
         {
             _lastAttack = Time.time;

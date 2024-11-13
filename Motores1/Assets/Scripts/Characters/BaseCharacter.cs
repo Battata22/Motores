@@ -48,6 +48,7 @@ public abstract class BaseCharacter : MonoBehaviour, IKickable
     protected ArmorControl _myArmorControl;
     protected DOTControl _myDOTControl;
     protected StaminaControl _myStaminaControl;
+    protected LifeSaver _myLifeSaver;
 
     public delegate void VoidDelegate();
     public VoidDelegate _myAttack, _myChargeAttack, _myBlock;
@@ -69,6 +70,7 @@ public abstract class BaseCharacter : MonoBehaviour, IKickable
         _myHealthSystem = new HealthSystem(this);
         _myDOTControl = new DOTControl(this, _myHealthSystem);
         _myStaminaControl = new StaminaControl(this, _staminaRegenRate, _maxStamina);
+        _myLifeSaver = new LifeSaver(this.transform);
         SetWeapon(_currentWeapon);
         //CallDOTs += delegate { };
       

@@ -6,6 +6,8 @@ using PlayerInput;
 public class Player : BaseCharacter
 {
     [SerializeField] GameObject _mesh;
+    [SerializeField] float _kickDist;
+    [SerializeField] float _pickUpRange;
 
     public int money;
     public bool blueTeam;
@@ -34,6 +36,7 @@ public class Player : BaseCharacter
     {
         myControl.FakeUpdate();
         _myStaminaControl.FakeUpdate(ref stamina);
+        _myLifeSaver.FakeUpdate();
 
         CallDOTs(ref _hp);
         
@@ -115,7 +118,7 @@ public class Player : BaseCharacter
     public override void Kick()
     {
         var pos = new Vector3(transform.position.x, transform.position.y + 1f, transform.position.z);
-        if (Physics.Raycast(pos, transform.forward, out RaycastHit hit) && hit.transform.TryGetComponent<IKickable>(out IKickable target))
+        if (Physics.Raycast(pos, transform.forward, out RaycastHit hit, _kickDist) && hit.transform.TryGetComponent<IKickable>(out IKickable target))
         {
             target.GetKicked();
 
@@ -154,7 +157,7 @@ public class Player : BaseCharacter
 
     public void CheckPickUp()
     {
-        Collider[] objects = Physics.OverlapSphere(transform.position, 0.25f);
+        Collider[] objects = Physics.OverlapSphere(transform.position, _pickUpRange );
         foreach (Collider collider in objects)
         {
             if(collider.gameObject.TryGetComponent<IPickeable>(out IPickeable pickeable))

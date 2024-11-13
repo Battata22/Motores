@@ -21,10 +21,12 @@ public class AttackCenter : MonoBehaviour
         if (rotation >= 360) rotation = 0;
         transform.rotation = Quaternion.Euler(0, 0, rotation * rotVel);
 
-        if (dentro && Input.GetMouseButtonDown(0))
+        if (dentro && Input.GetMouseButtonDown(1))
         {
 
             gameObject.SetActive(false);
+
+            
 
             //GameManager.Instance.enemyInCombat._attackSpeed = GameManager.Instance.enemyInCombat._attackSpeed - 0.1f;
             //restar tiempo de attack speed del enemigo
@@ -41,6 +43,11 @@ public class AttackCenter : MonoBehaviour
     }
 
     private void OnTriggerExit2D(Collider2D collision)
+    {
+        dentro = false;
+    }
+
+    private void OnDisable()
     {
         dentro = false;
     }

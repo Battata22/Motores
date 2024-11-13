@@ -10,7 +10,7 @@ public class AttackCanvas : MonoBehaviour
 
     void Update()
     {
-        if (dentro && Input.GetMouseButtonDown(0))
+        if (dentro && Input.GetMouseButtonDown(1))
         {
 
             gameObject.SetActive(false);
