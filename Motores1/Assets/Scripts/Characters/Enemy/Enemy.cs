@@ -8,16 +8,25 @@ public abstract class Enemy : BaseCharacter
 
     [SerializeField] protected BaseCharacter _target;
     [SerializeField] protected float _attackDist;
+    [SerializeField, Range(0,100)] protected int _chanceOfBlock;
+    [SerializeField, Range(0,1)] protected float _nerfChancePorcentage;
+    [SerializeField, Range(0, 100 )] float _currentBlockChance;
 
     //Combat CD
     [SerializeField] protected float _enterCombatCD;
     float _lastCombatTime = -1;
 
+    protected override void Awake()
+    {
+        base.Awake();
+        _currentBlockChance = _chanceOfBlock;
+    }
+
     private void Update()
     {
         _myLifeSaver.FakeUpdate();
 
-        if (inCombat && Time.time - _lastAttack > _attackSpeed)
+        if (inCombat && Time.time - _lastAttack > _currentAtkSpd)
         {
             _lastAttack = Time.time;
 
@@ -35,7 +44,7 @@ public abstract class Enemy : BaseCharacter
                 //Debug.Log($"<color=#ff00ff>Tipo de ataque: Pesado</color>");
             }
 
-            GameManager.Instance.CombatCanvas.ActivateDanger(dir);
+            GameManager.Instance.CombatCanvas.ActivateDanger(dir, this, _damage, _currentAtkSpd);
         }
     }
 
@@ -92,7 +101,7 @@ public abstract class Enemy : BaseCharacter
 
     protected override void EnterCombat()
     {
-        GameManager.Instance.enemyInCombat = this;
+        GameManager.Instance.EnemyInCombat = this;
 
         Debug.Log($"{gameObject.name} Enter combat mode");
         _canMove = false;
@@ -109,13 +118,26 @@ public abstract class Enemy : BaseCharacter
         Cursor.visible = true; ;
     }
 
+    public override void TakeDamage(float dmg, AttackDirectionList attackDir)
+    {
+        var num = Random.Range(0, _chanceOfBlock);
+        Debug.Log($"<color=magenta>Numero Random {num} Chance en int {(int)_currentBlockChance}</color>");
+        if (num < (int)_currentBlockChance)
+            DoBlock();
+        else
+            base.TakeDamage(dmg, attackDir);
+    }
+
     protected override void ExitCombat()
     {
-        GameManager.Instance.enemyInCombat = null;
+        GameManager.Instance.EnemyInCombat = null;
 
         Debug.Log($"{gameObject.name} Exit combat mode");
         _canMove = true;
-        inCombat = false;  
+        inCombat = false;
+
+        ResetAttackSpeed();
+        ResetBlockChance();
 
         GameManager.Instance.OnCombatExit -= ExitCombat;
         GameManager.Instance.OnCombatEnter += EnterCombat;
@@ -135,5 +157,22 @@ public abstract class Enemy : BaseCharacter
 
         transform.LookAt(_target.transform);
     }
+
+    void DoBlock()
+    {
+        Debug.Log($"<color=red> ATAQUE BLOQUEADO </color>");
+        NerfBlockChance();
+    }
+
+    protected void NerfBlockChance()
+    {
+        _currentBlockChance *= _nerfChancePorcentage;
+    }
+
+    void ResetBlockChance()
+    {
+        _currentBlockChance = _chanceOfBlock;
+    }
+    
 
 }

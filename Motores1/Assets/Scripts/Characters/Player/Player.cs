@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using PlayerInput;
+using UnityEngine.UI;
 
 public class Player : BaseCharacter
 {
@@ -16,6 +17,9 @@ public class Player : BaseCharacter
     public VoidDelegateFloat2 _playerMovemente;
 
     PlayerControl myControl;
+
+    //Canvas
+    [SerializeField] public Image _healthBar, _staminaBar;
 
     //Dev
     [Header("<color=green> Developer test </color>")]
@@ -32,10 +36,17 @@ public class Player : BaseCharacter
         myControl = new PlayerControl(this);
     }
 
+    protected override void Start()
+    {
+        base.Start();
+
+        GameManager.Instance.Player = this;
+    }
+
     private void Update()
     {
         myControl.FakeUpdate();
-        _myStaminaControl.FakeUpdate(ref stamina);
+        _myStaminaControl.FakeUpdate(ref _stamina);
         _myLifeSaver.FakeUpdate();
 
         CallDOTs(ref _hp);
@@ -78,6 +89,12 @@ public class Player : BaseCharacter
 
     }
 
+    private void LateUpdate()
+    {
+        UpdateHpUI();
+        UpdateStaminaUI();
+    }
+
     protected void Movement(float xAxis, float zAxis)
     {
         //base.Movement();
@@ -92,7 +109,7 @@ public class Player : BaseCharacter
         var dir = (transform.right * xAxis) + (transform.forward * zAxis).normalized;
         _rb.position += dir * _runningSpeed * Time.deltaTime;
 
-        _myStaminaControl.DecreseStamina(ref stamina, _runningStmCost * Time.deltaTime);
+        _myStaminaControl.DecreseStamina(ref _stamina, _runningStmCost * Time.deltaTime);
     }
 
     public override void UsePotion()
@@ -128,6 +145,7 @@ public class Player : BaseCharacter
 
     public void RunningState(bool coso)
     {
+        if (inCombat) return;
         running = coso;
         if (running)
             _playerMovemente = Run;
@@ -150,6 +168,7 @@ public class Player : BaseCharacter
         _mesh.SetActive(true);
         _playerMovemente = Movement;
         inCombat = false;
+        ResetAttackSpeed();
 
         GameManager.Instance.OnCombatExit -= ExitCombat;
         GameManager.Instance.OnCombatEnter += EnterCombat;
@@ -166,4 +185,26 @@ public class Player : BaseCharacter
             }
         }
     }
+
+    public void UpdateHpUI()
+    {
+        _healthBar.fillAmount = _hp / _maxHp;
+    }
+    public void UpdateStaminaUI()
+    {
+        _staminaBar.fillAmount = _stamina / _maxStamina;
+    }
+
+    public void DoBlock()
+    {
+        _myBlock();
+    }
+
+    public float GiveAttackStats(out float _atkSpd)
+    {
+        _atkSpd = _currentAtkSpd;
+        return _damage;
+    }
+
+    
 }

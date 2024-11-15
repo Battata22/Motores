@@ -9,9 +9,9 @@ public abstract class BaseCharacter : MonoBehaviour, IKickable
     //Basic
     protected string _name;
     [SerializeField] protected float _maxHp; //agregado
-    protected float _hp;
+    [SerializeField] protected float _hp;
     [SerializeField] protected float _maxStamina; //agregado
-    protected float stamina; //cambiado a protected
+    protected float _stamina; //cambiado a protected
     [SerializeField] protected float _staminaRegenRate;
     [SerializeField] protected float _speed;
     //Run
@@ -22,7 +22,8 @@ public abstract class BaseCharacter : MonoBehaviour, IKickable
     protected Rigidbody _rb; //agregado
 
     //attack
-    [SerializeField] public float _damage, _attackSpeed;
+    [SerializeField] protected float _damage, _baseAttackSpeed;
+    [SerializeField]protected float _currentAtkSpd;
     protected float _lastAttack = -1;
     protected bool _heavyAttack;
     //armor
@@ -42,7 +43,7 @@ public abstract class BaseCharacter : MonoBehaviour, IKickable
     //Effects
     public bool bleading, poisoned, outOfBreath;
 
-    public int potions;
+    protected int potions;
 
     protected HealthSystem _myHealthSystem;
     protected ArmorControl _myArmorControl;
@@ -72,26 +73,28 @@ public abstract class BaseCharacter : MonoBehaviour, IKickable
         _myStaminaControl = new StaminaControl(this, _staminaRegenRate, _maxStamina);
         _myLifeSaver = new LifeSaver(this.transform);
         SetWeapon(_currentWeapon);
+        ResetAttackSpeed();
         //CallDOTs += delegate { };
       
         inCombat = false;
         outOfBreath = false;
         _hp = _maxHp;
-        stamina = _maxStamina;
+        _stamina = _maxStamina;
     }
 
     protected virtual void Start()
     {
+
         GameManager.Instance.OnCombatEnter += EnterCombat;
     }
 
     //ahora toma un int
     public virtual void TakeDamage(float dmg, AttackDirectionList attackDir) 
     {
-        //print($"<color=red> Dmg entrante {dmg} </color>");
-        //print($"<color=green> Vida Inicial {_hp}</color>");
+        
         _myHealthSystem.CalcDamage(ref _hp, dmg, _myArmorControl, attackDir);
-        //print($"<color=green> Vida restante {_hp}</color>");
+        //Debug.Log($"<color=green>{this.name} </color>| Raw Damage: <color=red>{dmg} </color>| Direccion: <color=cyan>{attackDir} " +
+        //    $"</color>| Cuerrent Life <color=#ff00ff> {_hp}</color>");
 
         if(_hp < 0 )
         {
@@ -112,34 +115,49 @@ public abstract class BaseCharacter : MonoBehaviour, IKickable
 
     protected virtual void SwordNAttack() 
     {
-        _myStaminaControl.DecreseStamina(ref stamina, _staminaCost);
+        _myStaminaControl.DecreseStamina(ref _stamina, _staminaCost);
     }
     protected virtual void SwordCAttack() 
     {
-        _myStaminaControl.DecreseStamina(ref stamina, _staminaCost * 2f);
+        _myStaminaControl.DecreseStamina(ref _stamina, _staminaCost * 2f);
     }
-    protected virtual void SwordBlock() { }
+    protected virtual void SwordBlock() 
+    {
+        _myStaminaControl.DecreseStamina(ref _stamina, _staminaCost);
+    }
 
     protected virtual void SwAndShielsNAttack() 
     {
-        _myStaminaControl.DecreseStamina(ref stamina, _staminaCost);
+        _myStaminaControl.DecreseStamina(ref _stamina, _staminaCost);
     }
     protected virtual void SwAndShielsCAttack() 
     {
-        _myStaminaControl.DecreseStamina(ref stamina, _staminaCost * 2f);
+        _myStaminaControl.DecreseStamina(ref _stamina, _staminaCost * 2f);
     }
-    protected virtual void SwAndShielsBlock() { }
+    protected virtual void SwAndShielsBlock() 
+    {
+        _myStaminaControl.DecreseStamina(ref _stamina, _staminaCost);
+
+    }
 
     protected virtual void GreatSwordNAttack() 
     {
-        _myStaminaControl.DecreseStamina(ref stamina, _staminaCost);
+        _myStaminaControl.DecreseStamina(ref _stamina, _staminaCost);
     }
     protected virtual void GreatSwordCAttack() 
     {
-        _myStaminaControl.DecreseStamina(ref stamina, _staminaCost * 2f);
+        _myStaminaControl.DecreseStamina(ref _stamina, _staminaCost * 2f);
     }
-    protected virtual void GreatSwordBlock() { }
+    protected virtual void GreatSwordBlock() 
+    {
+        _myStaminaControl.DecreseStamina(ref _stamina, _staminaCost);
 
+    }
+
+    public void AddPotion()
+    {
+        potions++;
+    }
 
     protected abstract void EnterCombat();
     protected abstract void ExitCombat();
@@ -163,6 +181,7 @@ public abstract class BaseCharacter : MonoBehaviour, IKickable
     {
 
         _currentWeapon = newWeapon;
+
         switch (_currentWeapon)
         {
             case Weapon.WeaponType.Sword:
@@ -184,6 +203,8 @@ public abstract class BaseCharacter : MonoBehaviour, IKickable
                 _staminaCost = 20f;
                 break;
         }
+
+
         Debug.Log($"Current Weapon: {_currentWeapon}");
 
     }
@@ -216,6 +237,20 @@ public abstract class BaseCharacter : MonoBehaviour, IKickable
         CallDOTs -= _myDOTControl.DoPoisonDamage;
     }
 
+    /// <summary>
+    /// Usar que tanto % queres que se mantenga. Porcentaje de 0 a 1
+    /// </summary>
+    /// <param name="num"></param>
+    public void BuffAttackSpeed(float buff)
+    {
+        buff = Mathf.Clamp(buff, 0, 1);
+        _currentAtkSpd *= buff;
+    }
+
+    public void ResetAttackSpeed()
+    {
+        _currentAtkSpd = _baseAttackSpeed;
+    }
 
     private void OnDestroy()
     {
@@ -224,12 +259,12 @@ public abstract class BaseCharacter : MonoBehaviour, IKickable
     }
 
     //Identificador de golpe
-    public enum HitArea
-    {
-        Head,
-        Chest,
-        Legs
-    }
+    //public enum HitArea
+    //{
+    //    Head,
+    //    Chest,
+    //    Legs
+    //}
 
     //public enum Weapon
     //{

@@ -8,6 +8,8 @@ public class AttackCenter : MonoBehaviour
     [SerializeField] float rotVel;
     float rotation = 0;
     bool dentro = false;
+
+    [SerializeField] AttackCanvas _myImage;
     //float normalAttackSpeed;
 
     private void Start()
@@ -23,28 +25,34 @@ public class AttackCenter : MonoBehaviour
 
         if (dentro && Input.GetMouseButtonDown(1))
         {
-
-            gameObject.SetActive(false);
-
-            
-
-            //GameManager.Instance.enemyInCombat._attackSpeed = GameManager.Instance.enemyInCombat._attackSpeed - 0.1f;
-            //restar tiempo de attack speed del enemigo
-
-            print("le diste al centro");
-
+            Parry();
         }
 
+    }
+
+    void Parry()
+    {
+        Debug.Log("<color=yellow> PARRY </color>");
+
+        gameObject.SetActive(false);
+        _myImage.gameObject.SetActive(false);
+
+        //GameManager.Instance.enemyInCombat._attackSpeed = GameManager.Instance.enemyInCombat._attackSpeed - 0.1f;
+        //restar tiempo de attack speed del enemigo
+
+        print("le diste al centro");
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
         dentro = true;
+        _myImage.ParryDetected(dentro);
     }
 
     private void OnTriggerExit2D(Collider2D collision)
     {
         dentro = false;
+        _myImage.ParryDetected(dentro);
     }
 
     private void OnDisable()

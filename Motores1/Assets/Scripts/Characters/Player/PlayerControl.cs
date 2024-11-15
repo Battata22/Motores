@@ -61,7 +61,7 @@ namespace PlayerInput
             }
             if (Input.GetMouseButtonDown(1))
             {
-                player._myBlock();
+                //player._myBlock();
                 Debug.Log($"<color=blue> Player Guard Up </color>");
             }
             if (Input.GetMouseButtonUp(1))

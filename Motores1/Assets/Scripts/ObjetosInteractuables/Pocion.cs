@@ -6,7 +6,7 @@ public class Pocion : MonoBehaviour, IPickeable
 {
     public void PickUp(BaseCharacter baseChar)
     {
-        baseChar.potions++;
+        baseChar.AddPotion();
         Destroy(gameObject);
     }
 }

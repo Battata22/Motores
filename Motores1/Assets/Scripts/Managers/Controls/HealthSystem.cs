@@ -19,11 +19,11 @@ public class HealthSystem
 
     public void CalcDamage(ref float ownerHp, float rawDamage, ArmorControl armorCtrl, BaseCharacter.AttackDirectionList attackDir)
     {
-        float resultHp = rawDamage;
+        //float resultHp = ownerHp;
         //llamar a armadura
-        resultHp -= armorCtrl.CalcArmor(rawDamage, attackDir);
-
-        ownerHp = resultHp;
+        float resultDmg = armorCtrl.CalcArmor(rawDamage, attackDir);
+        //Debug.Log($"DAÑO A REALIZAR: {resultDmg}");
+        ownerHp -= resultDmg;
     }
 
     /// <summary>

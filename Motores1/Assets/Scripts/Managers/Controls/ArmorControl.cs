@@ -18,7 +18,7 @@ public class ArmorControl
 
     public float CalcArmor(float rawDamage, BaseCharacter.AttackDirectionList attackDir)
     {
-        Debug.Log("Llamado calculo de armadura");
+        //Debug.Log("Llamado calculo de armadura");
         float result = 0;
 
         switch (attackDir)
@@ -26,17 +26,17 @@ public class ArmorControl
             case BaseCharacter.AttackDirectionList.UpLeft:
             case BaseCharacter.AttackDirectionList.UpCenter:
             case BaseCharacter.AttackDirectionList.UpRight:
-                CalcHelmetArmor(rawDamage);
+                result = CalcHelmetArmor(rawDamage);
                 break;
             case BaseCharacter.AttackDirectionList.MidLeft:
             case BaseCharacter.AttackDirectionList.MidCenter:
             case BaseCharacter.AttackDirectionList.MidRight:
-                CalcChestArmor(rawDamage); 
+                result = CalcChestArmor(rawDamage); 
                 break;
             case BaseCharacter.AttackDirectionList.LowLeft:
             case BaseCharacter.AttackDirectionList.LowCenter:
             case BaseCharacter.AttackDirectionList.LowRight:
-                CalcLegsArmor(rawDamage);
+                result = CalcLegsArmor(rawDamage);
                 break;
         }
 
@@ -47,7 +47,7 @@ public class ArmorControl
     {
         float result = rawDamage;
         result -= rawDamage * _chestArmor * 0.1f;
-        Debug.Log($"Armadura de Cabeza calculada: Daño crudo {rawDamage} Daño Reducido {result}");
+        //Debug.Log($"Armadura de Cabeza calculada: Daño crudo {rawDamage} Daño final {result}");
         return result;
     }
 
@@ -55,7 +55,7 @@ public class ArmorControl
     {
         float result = rawDamage;
         result -= rawDamage * _chestArmor * 0.1f;
-        Debug.Log($"Armadura de Pecho calculada: Daño crudo {rawDamage} Daño Reducido {result}");
+        //Debug.Log($"Armadura de Pecho calculada: Daño crudo {rawDamage} Daño final {result}");
         return result;
     }
 
@@ -63,7 +63,7 @@ public class ArmorControl
     {
         float result = rawDamage;
         result -= rawDamage * _chestArmor * 0.1f;
-        Debug.Log($"Armadura de Piernas calculada: Daño crudo {rawDamage} Daño Reducido {result}");
+        //Debug.Log($"Armadura de Piernas calculada: Daño crudo {rawDamage} Daño final {result}");
         return result;
     }
 

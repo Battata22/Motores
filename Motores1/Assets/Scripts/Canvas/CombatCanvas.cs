@@ -5,7 +5,11 @@ using UnityEngine.UI;
 
 public class CombatCanvas : MonoBehaviour
 {
-    [SerializeField] RawImage[] _attackAreas, _centros; 
+    [SerializeField] RawImage[] _attackAreas, _centros;
+
+    /// <summary>
+    /// USAR COMO EVENTO, SOLO USAR += o -=
+    /// </summary>
 
     private void Start()
     {
@@ -16,9 +20,9 @@ public class CombatCanvas : MonoBehaviour
 
     }
 
-    public void ActivateDanger(BaseCharacter.AttackDirectionList attackDir)
+    public void ActivateDanger(BaseCharacter.AttackDirectionList attackDir, BaseCharacter attacker, float damage, float attackSpeed)
     {
-        foreach(var img in _attackAreas)
+        foreach (var img in _attackAreas)
         {
             img.gameObject.SetActive(false);
         }
@@ -28,7 +32,10 @@ public class CombatCanvas : MonoBehaviour
         }
 
         _attackAreas[(int)attackDir].gameObject.SetActive(true);
+        _attackAreas[(int)attackDir].gameObject.GetComponent<AttackCanvas>().StartAttack(attackDir, attacker, damage, attackSpeed);
+
         _centros[(int)attackDir].gameObject.SetActive(true);
+
         //direccion de ataque 
         //player lo saaca del GM
         //Si necesitamos comportamiento de recover necesita enemigo que llamo al atque, lo podes pedir por parametro en esta funcion
@@ -37,6 +44,7 @@ public class CombatCanvas : MonoBehaviour
     void EnterCombat()
     {
         gameObject.SetActive(true);
+
 
         GameManager.Instance.OnCombatEnter -= EnterCombat;
         GameManager.Instance.OnCombatExit += ExitCombat;
@@ -49,14 +57,14 @@ public class CombatCanvas : MonoBehaviour
         GameManager.Instance.OnCombatExit -= ExitCombat;
         GameManager.Instance.OnCombatEnter += EnterCombat;
 
-        foreach(var image in _attackAreas)
-        {
-            image.enabled = false;
-        }
-        foreach (var image in _centros)
-        {
-            image.enabled = false;
-        }
+        //foreach(var image in _attackAreas)
+        //{
+        //    image.enabled = false;
+        //}
+        //foreach (var image in _centros)
+        //{
+        //    image.enabled = false;
+        //}
     }
 
     private void OnDestroy()
