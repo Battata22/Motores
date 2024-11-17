@@ -21,15 +21,22 @@ namespace PlayerInput
         public KeyCode sprint = KeyCode.LeftShift;
         public KeyCode pickUp = KeyCode.LeftControl;
 
-
+        bool inputDisable = false;
+        public bool chargedAttack {  get; private set; } = false;
+        float chargeTime = 0, chargeTimeNeed = 1.5f;
 
         public PlayerControl(Player newPlayer)
         {
             player = newPlayer;
+
+            GameManager.Instance.OnShopActive += DisablePlayerInput;
+            GameManager.Instance.OnShopDisable += EnablePlayerInput;
         }
 
         public void FakeUpdate()
         {
+            if(inputDisable) return;
+
             var horizontal = Input.GetAxisRaw("Horizontal");
             var vertical = Input.GetAxisRaw("Vertical");
 
@@ -54,11 +61,27 @@ namespace PlayerInput
             if (Input.GetKeyDown(usePotion))
             {               
                 player.UsePotion();
-            }
-            if (Input.GetMouseButtonDown(0) && !player.outOfBreath)
+            }           
+            if (Input.GetMouseButtonUp(0) && !player.outOfBreath)
             {
-                player._myAttack();
-                Debug.Log($"<color=red> Player Attack </color>");
+                if (!chargedAttack)
+                {
+                    player._myAttack();
+                    Debug.Log($"<color=red> Player Attack </color>");
+                }
+                else
+                {
+                    player._myChargeAttack();
+                    Debug.Log($"<color=red> Player Charge Attack </color>");
+                }
+                chargedAttack = false;
+                chargeTime = 0;
+            }
+            if (Input.GetMouseButton(0) && !player.outOfBreath) 
+            {
+                chargeTime += Time.deltaTime;
+                if(chargeTime > chargeTimeNeed)
+                    chargedAttack=true;
             }
             if (Input.GetMouseButtonDown(1))
             {
@@ -94,6 +117,16 @@ namespace PlayerInput
                 player.TryInteract();
             }
         }
-    }
+
+        void DisablePlayerInput()
+        {
+            inputDisable = true;
+        }
+
+        void EnablePlayerInput()
+        {
+            inputDisable = false;
+        }
+    }  
 }
 

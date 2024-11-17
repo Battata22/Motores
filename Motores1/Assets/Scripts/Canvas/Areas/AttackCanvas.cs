@@ -1,18 +1,21 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class AttackCanvas : MonoBehaviour
 {
     bool dentro = false;
     [SerializeField] GameObject centro;
     [SerializeField] BaseCharacter.AttackDirectionList _myAttackDir;
+    Color _originalColor;
 
     
 
-    BaseCharacter _myOwner;
+    public BaseCharacter myOwner;
     private float _myDamage;
     private float _myAttackSpeed;
+    bool _isChargeAttack;
 
     
     void Update()
@@ -23,12 +26,21 @@ public class AttackCanvas : MonoBehaviour
         } 
     }
 
-    public void StartAttack(BaseCharacter.AttackDirectionList attackDir, BaseCharacter attacker, float damage, float attackSpeed)
+    public void StartAttack(BaseCharacter.AttackDirectionList attackDir, BaseCharacter attacker, float damage, float attackSpeed, bool isChargeAttack)
     {
         _myAttackDir = attackDir;
         _myDamage = damage;
-        _myOwner = attacker;
+        myOwner = attacker;
         _myAttackSpeed = attackSpeed - 0.1f;
+        _isChargeAttack = isChargeAttack;
+
+        _originalColor = gameObject.GetComponent<RawImage>().color;
+
+        if (isChargeAttack)
+        {
+            gameObject.GetComponent<RawImage>().color = Color.yellow;
+            _myDamage += _myDamage * 0.25f;
+        }
 
         StartCoroutine(DoDamage());
     }
@@ -39,7 +51,14 @@ public class AttackCanvas : MonoBehaviour
         yield return new WaitForSeconds(_myAttackSpeed);
 
         //Debug.Log($"<color=green>Attacando: {GameManager.Instance.Player}</color><color=red>{_myDamage}</color> dmg, direccion <color=cyan>{_myAttackDir}</color>");
-        GameManager.Instance.Player.TakeDamage(_myDamage, _myAttackDir);
+        GameManager.Instance.Player.TakeDamage(_myDamage, _myAttackDir, _isChargeAttack);
+        if (!_isChargeAttack)
+            myOwner._myAttack();
+        else
+            myOwner._myChargeAttack();
+
+
+        gameObject.GetComponent<RawImage>().color = _originalColor;
     }
 
     void Block()
@@ -49,9 +68,15 @@ public class AttackCanvas : MonoBehaviour
             Debug.Log("<color=red> TOMATE UN RESPIRO </color>");
             return;
         } 
+        if(_isChargeAttack)
+        {
+            Debug.Log("<color=yellow> NO SE PUEDE BLOQUEAR ATAQUE CARGADO </color>");
+            return;
+        }
         Debug.Log("<color=red> BLOCK </color>");
 
-        _myOwner.BuffAttackSpeed(0.9f);
+        myOwner.BuffAttackSpeed(0.9f);
+        
 
         GameManager.Instance.Player.DoBlock();
 

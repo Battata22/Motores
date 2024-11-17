@@ -37,6 +37,8 @@ public class AttackCenter : MonoBehaviour
         gameObject.SetActive(false);
         _myImage.gameObject.SetActive(false);
 
+        _myImage.myOwner.BuffAttackSpeed(0.9f);
+
         //GameManager.Instance.enemyInCombat._attackSpeed = GameManager.Instance.enemyInCombat._attackSpeed - 0.1f;
         //restar tiempo de attack speed del enemigo
 

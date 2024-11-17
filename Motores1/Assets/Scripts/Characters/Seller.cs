@@ -24,6 +24,7 @@ public class Seller : BaseCharacter, IInteractable
     [SerializeField] protected BaseCharacter _target;
     [SerializeField] protected float _attackDist;
     [SerializeField, Range(0, 100)] protected int _chanceOfBlock;
+    [SerializeField, Range(0, 100)] protected int _chanceOfChargeAttak;
     [SerializeField, Range(0, 1)] protected float _nerfChancePorcentage;
     [SerializeField, Range(0, 100)] float _currentBlockChance;
     [SerializeField] bool _angry = false;
@@ -59,18 +60,9 @@ public class Seller : BaseCharacter, IInteractable
             var dir = ChooseAttackDirection();
             //Debug.Log($"<color=#00ffff>Direccion de Ataque: {dir}</color>");
 
-            if (Random.Range(0, 2) == 0)
-            {
-                _heavyAttack = false;
-                //Debug.Log($"<color=#ff00ff>Tipo de ataque: Liviano</color>");
-            }
-            else
-            {
-                _heavyAttack = true;
-                //Debug.Log($"<color=#ff00ff>Tipo de ataque: Pesado</color>");
-            }
+            ChooseChargeAttack();
 
-            GameManager.Instance.CombatCanvas.ActivateDanger(dir, this, _damage, _currentAtkSpd);
+            GameManager.Instance.CombatCanvas.ActivateDanger(dir, this, _damage, _currentAtkSpd, _heavyAttack);
         }
     }
 
@@ -85,6 +77,8 @@ public class Seller : BaseCharacter, IInteractable
 
     void CheckEnterCombat()
     {
+        if (outOfBreath) return;
+
         if (!inCombat && (Time.time - _lastCombatTime > _enterCombatCD) && Vector3.SqrMagnitude(_target.transform.position - transform.position) <= (_attackDist * _attackDist))
         {
             GameManager.Instance.EnemyInCombat = this;
@@ -95,6 +89,8 @@ public class Seller : BaseCharacter, IInteractable
 
     void ChaseCheck()
     {
+        if (outOfBreath) return;
+
         if (!(Vector3.SqrMagnitude(_target.transform.position - transform.position) <= (_attackDist * _attackDist)))
             ChaseTarget();
     }
@@ -158,14 +154,28 @@ public class Seller : BaseCharacter, IInteractable
         Cursor.visible = true; ;
     }
 
-    public override void TakeDamage(float dmg, AttackDirectionList attackDir)
+    public override void TakeDamage(float dmg, AttackDirectionList attackDir, bool chargeAttack)
     {
         var num = Random.Range(0, _chanceOfBlock);
         //Debug.Log($"<color=magenta>Numero Random {num} Chance en int {(int)_currentBlockChance}</color>");
-        if (num < (int)_currentBlockChance)
+        if (!outOfBreath && !chargeAttack && num < (int)_currentBlockChance)
             DoBlock();
         else
-            base.TakeDamage(dmg, attackDir);
+            base.TakeDamage(dmg, attackDir, chargeAttack);
+    }
+
+    protected void ChooseChargeAttack()
+    {
+        if (Random.Range(1, 101) <= _chanceOfChargeAttak)
+        {
+            _heavyAttack = true;
+            //Debug.Log($"<color=#ff00ff>Tipo de ataque: Liviano</color>");
+        }
+        else
+        {
+            _heavyAttack = false;
+            //Debug.Log($"<color=#ff00ff>Tipo de ataque: Pesado</color>");
+        }
     }
 
     protected override void ExitCombat()

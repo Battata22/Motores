@@ -13,6 +13,7 @@ public abstract class BaseCharacter : MonoBehaviour, IKickable
     [SerializeField] protected float _maxStamina; //agregado
     protected float _stamina; //cambiado a protected
     [SerializeField] protected float _staminaRegenRate;
+    protected float _currentStaminaRegen;
     [SerializeField] protected float _speed;
     //Run
     [SerializeField] protected float _runningSpeed;
@@ -70,7 +71,8 @@ public abstract class BaseCharacter : MonoBehaviour, IKickable
         _myArmorControl = new ArmorControl(this);
         _myHealthSystem = new HealthSystem(this);
         _myDOTControl = new DOTControl(this, _myHealthSystem);
-        _myStaminaControl = new StaminaControl(this, _staminaRegenRate, _maxStamina);
+        _currentStaminaRegen = _staminaRegenRate;
+        _myStaminaControl = new StaminaControl(this, _currentStaminaRegen, _maxStamina);
         _myLifeSaver = new LifeSaver(this.transform);
         SetWeapon(_currentWeapon);
         ResetAttackSpeed();
@@ -89,7 +91,7 @@ public abstract class BaseCharacter : MonoBehaviour, IKickable
     }
 
     //ahora toma un int
-    public virtual void TakeDamage(float dmg, AttackDirectionList attackDir) 
+    public virtual void TakeDamage(float dmg, AttackDirectionList attackDir, bool chargeAttack) 
     {
         
         _myHealthSystem.CalcDamage(ref _hp, dmg, _myArmorControl, attackDir);
@@ -106,6 +108,7 @@ public abstract class BaseCharacter : MonoBehaviour, IKickable
     protected virtual void Death() 
     {       
         print($"<color=red> Murio: {this.name}</color>");
+        GameManager.Instance.ExitCombat();
         Destroy(gameObject);
     }
 
@@ -163,7 +166,11 @@ public abstract class BaseCharacter : MonoBehaviour, IKickable
     protected abstract void EnterCombat();
     protected abstract void ExitCombat();
 
-    public virtual void UsePotion() { }
+    public virtual void UsePotion() 
+    {
+        StopBleed();
+        StopPoison();
+    }
 
     public virtual void Kick()
     {
@@ -189,18 +196,21 @@ public abstract class BaseCharacter : MonoBehaviour, IKickable
                 _myAttack = SwordNAttack;
                 _myChargeAttack = SwordCAttack;
                 _myBlock = SwordBlock;
+                _damage = 20f;
                 _staminaCost = 20f;
                 break;
             case Weapon.WeaponType.GreatSword:
                 _myAttack = SwAndShielsNAttack;
                 _myChargeAttack = SwAndShielsCAttack;
                 _myBlock = SwAndShielsBlock;
+                _damage = 35f;
                 _staminaCost = 30f;
                 break;
             case Weapon.WeaponType.SwordAndShield:
                 _myAttack = GreatSwordNAttack;
                 _myChargeAttack = GreatSwordCAttack;
                 _myBlock = GreatSwordBlock;
+                _damage = 20f;
                 _staminaCost = 20f;
                 break;
         }
@@ -213,6 +223,11 @@ public abstract class BaseCharacter : MonoBehaviour, IKickable
     public virtual void SetArmor(ArmorPice.ArmorType newArmor, ArmorPice.ArmorQuality newArmorQuality) 
     {
         _myArmorControl.SetArmor(newArmor, newArmorQuality);
+    }
+
+    public virtual void UpgradeArmor(ArmorPice.ArmorType toUpgrade)
+    {
+        _myArmorControl.UpgradeArmor(toUpgrade);
     }
 
     public virtual void StartBleed(float duration) 
@@ -246,11 +261,32 @@ public abstract class BaseCharacter : MonoBehaviour, IKickable
     {
         buff = Mathf.Clamp(buff, 0, 1);
         _currentAtkSpd *= buff;
+        if (_currentAtkSpd < 0.15f)
+            _currentAtkSpd = 0.15f;
     }
 
     public void ResetAttackSpeed()
     {
         _currentAtkSpd = _baseAttackSpeed;
+    }
+
+    /// <summary>
+    /// Añadir X% al regen actual;
+    /// </summary>
+    /// <param name="buff"></param>
+    public void BuffStamRegen(float buff)
+    {
+        buff = Mathf.Clamp(buff, 0, 1);
+        _currentStaminaRegen += _currentStaminaRegen * buff;
+        if (_currentStaminaRegen > _staminaRegenRate * 4)
+            _currentStaminaRegen = _staminaRegenRate * 4;
+        _myStaminaControl.UpdateStamRegen(_currentStaminaRegen);
+    }
+
+    public void ResetStamRegen()
+    {
+        _currentStaminaRegen = _staminaRegenRate;
+        _myStaminaControl.UpdateStamRegen(_currentStaminaRegen);
     }
 
     private void OnDestroy()

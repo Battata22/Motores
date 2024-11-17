@@ -17,7 +17,7 @@ public class PlayerAttackCanvas : MonoBehaviour
 
     void Update()
     {
-        if (dentro && Input.GetMouseButtonDown(0))
+        if (dentro && Input.GetMouseButtonUp(0))
         {
             Debug.Log("CLICK DETECTADO");
             StartAttack();
@@ -30,26 +30,33 @@ public class PlayerAttackCanvas : MonoBehaviour
         float _attackSpeed;
         float atkStmCost;
         bool outOfBreath;
+        float chargeAtkMult;
         //_myAttackDir = attackDir;
-        _myDamage = _myOwner.GiveAttackStats(out _attackSpeed, out stamina, out atkStmCost,out outOfBreath);
+        _myDamage = _myOwner.GiveAttackStats(out _attackSpeed, out stamina, out atkStmCost,out outOfBreath, out chargeAtkMult);
         //Debug.Log($"Dmg {_myDamage} AtkSpd {_attackSpeed}");
 
         if (!outOfBreath && stamina >= atkStmCost)
-            Attack(_attackSpeed);
+            Attack(_attackSpeed, chargeAtkMult);
         else
         {
             Debug.Log("<color=yellow> DEFICIENCIA DE ESTAMINA </color>");
         }
     }
 
-    void Attack(float _attackSpeed)
+    void Attack(float _attackSpeed,float _chargeMult)
     {
-
+        bool chargeAttack = false;
+        if (_chargeMult != 1f)chargeAttack = true;
         //Debug.Log($"<color=green>Attacando: {GameManager.Instance.Player}</color><color=red>{_myDamage}</color> dmg, direccion <color=cyan>{_myAttackDir}</color>");
-        GameManager.Instance.EnemyInCombat.TakeDamage(_myDamage, _myAttackDir);
+        _myActivator.DeactivateImages(_attackSpeed);
+        GameManager.Instance.EnemyInCombat.TakeDamage(_myDamage * _chargeMult, _myAttackDir, chargeAttack);
+        if (chargeAttack)
+            _myOwner._myChargeAttack();
+        else
+            _myOwner._myAttack();
+
         _myOwner.BuffAttackSpeed(0.8f);
 
-        _myActivator.DeactivateImages(_attackSpeed);
     }
 
     public void GetActivator(PlayerCanvasAttackActivate newActivator)

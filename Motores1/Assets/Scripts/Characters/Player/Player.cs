@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using PlayerInput;
 using UnityEngine.UI;
+using static UnityEngine.GraphicsBuffer;
 
 public class Player : BaseCharacter
 {
@@ -21,6 +22,10 @@ public class Player : BaseCharacter
     //Canvas
     [SerializeField] public Image _healthBar, _staminaBar;
 
+    //[Header("<color=red> DOTs")]
+    //[SerializeField, Range(0, 100)] int _bleedChance;
+    //[SerializeField] float _bleedDuration;
+
     //Dev
     [Header("<color=green> Developer test </color>")]
     [SerializeField] float dev_damagePlayer;
@@ -34,6 +39,7 @@ public class Player : BaseCharacter
         _myStaminaControl.OnOutOfBreath += RunningState;
         _playerMovemente = Movement;
         myControl = new PlayerControl(this);
+        //_myChargeAttack += ChanceOfBleed;
     }
 
     protected override void Start()
@@ -56,7 +62,7 @@ public class Player : BaseCharacter
         #region Dev Inputs
         if (Input.GetKeyDown(KeyCode.F1))
         {
-            TakeDamage(dev_damagePlayer, dev_attackDirection);
+            TakeDamage(dev_damagePlayer, dev_attackDirection, false);
         }
         if (Input.GetKeyDown(KeyCode.F2))
         {
@@ -131,6 +137,7 @@ public class Player : BaseCharacter
         Debug.Log($"<color=green> Player Use Potion </color>");
         _myHealthSystem.CalcHeal(ref _hp ,GameManager.Instance.potionHealAmount);
         potions--;
+        base.UsePotion();
     }
 
     public override void Kick()
@@ -142,6 +149,13 @@ public class Player : BaseCharacter
         }
         base.Kick();
     }
+
+    //void ChanceOfBleed()
+    //{
+    //    if (Random.Range(1, 101) > _bleedChance) return;
+    //    //Debug.Log($"<color=red> sangrado aplicado a {GameManager.Instance.EnemyInCombat.name} </color>");
+    //    GameManager.Instance.EnemyInCombat.StartPoison(_bleedDuration);
+    //}
 
     public void RunningState(bool coso)
     {
@@ -216,18 +230,22 @@ public class Player : BaseCharacter
         _myBlock();
     }
 
-    public float GiveAttackStats(out float _atkSpd, out float _stm, out float _atkStmCost, out bool _outOfBreath)
+    public float GiveAttackStats(out float _atkSpd, out float _stm, out float _atkStmCost, out bool _outOfBreath, out float _chargeAtkMult)
     {
         _atkSpd = _currentAtkSpd;
         _stm = _stamina;
         _atkStmCost = _staminaCost;
         _outOfBreath = outOfBreath;
+        if (myControl.chargedAttack)
+            _chargeAtkMult = 2f;
+        else
+            _chargeAtkMult = 1f;
         return _damage;
     }
 
     void EnterShop()
     {
-        GameManager.Instance.Shop.GetPlayerInfo(ref money, this, ref _currentWeapon);
+        GameManager.Instance.Shop.GetPlayerInfo(this, ref _currentWeapon);
     }
     /// <summary>
     /// If Can Pay return True
@@ -247,5 +265,9 @@ public class Player : BaseCharacter
         }
     }
 
-    
+    protected override void Death()
+    {
+        print($"<color=red> Murio: {this.name}</color>");
+
+    }
 }

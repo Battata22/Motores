@@ -15,6 +15,11 @@ public class PlayerCanvasAttackActivate : MonoBehaviour
         }
     }
 
+    private void OnEnable()
+    {
+        StartCoroutine(ActivateImages(0));
+    }
+
     public void DeactivateImages(float attackSpeed)
     {
         for (int i = 0; i < _images.Length; i++)
@@ -34,4 +39,9 @@ public class PlayerCanvasAttackActivate : MonoBehaviour
             _images[i].gameObject.SetActive(true);
         }
     }
+
+//    private void OnDisable()
+//    {
+//        StopAllCoroutines();
+//    }
 }

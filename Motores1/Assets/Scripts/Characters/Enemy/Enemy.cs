@@ -4,11 +4,13 @@ using UnityEngine;
 
 public abstract class Enemy : BaseCharacter
 {
+    [Header("<color=red>Base Enemy Setings</color>")]
     public bool blueTeam;
 
     [SerializeField] protected BaseCharacter _target;
     [SerializeField] protected float _attackDist;
     [SerializeField, Range(0,100)] protected int _chanceOfBlock;
+    [SerializeField, Range(0,100)] protected int _chanceOfChargeAttak;
     [SerializeField, Range(0,1)] protected float _nerfChancePorcentage;
     [SerializeField, Range(0, 100 )] float _currentBlockChance;
 
@@ -22,40 +24,49 @@ public abstract class Enemy : BaseCharacter
     {
         base.Awake();
         _currentBlockChance = _chanceOfBlock;
+
+    }
+
+    protected override void Start()
+    {
+        base.Start();
         GameManager.Instance.OnShopActive += DisableAI;
         GameManager.Instance.OnShopDisable += EnableAI;
     }
 
-    private void Update()
+    protected virtual void Update()
     {
         if (noAI) return;
         _myLifeSaver.FakeUpdate();
+        _myStaminaControl.FakeUpdate(ref _stamina);
 
-        if (inCombat && Time.time - _lastAttack > _currentAtkSpd)
+        if (inCombat && !outOfBreath && Time.time - _lastAttack > _currentAtkSpd)
         {
             _lastAttack = Time.time;
 
             var dir = ChooseAttackDirection();
             //Debug.Log($"<color=#00ffff>Direccion de Ataque: {dir}</color>");
-            
-            if(Random.Range(0,2) == 0)
-            {
-                _heavyAttack = false;
-                //Debug.Log($"<color=#ff00ff>Tipo de ataque: Liviano</color>");
-            }
-            else
-            {
-                _heavyAttack = true;
-                //Debug.Log($"<color=#ff00ff>Tipo de ataque: Pesado</color>");
-            }
 
-            GameManager.Instance.CombatCanvas.ActivateDanger(dir, this, _damage, _currentAtkSpd);
+            ChooseChargeAttack();
+
+            GameManager.Instance.CombatCanvas.ActivateDanger(dir, this, _damage, _currentAtkSpd, _heavyAttack);
+            //if(_heavyAttack)
+            //{
+            //    _myAttack();
+            //}
+            //else
+            //{
+            //    _myChargeAttack();
+            //}
+
+            BuffStamRegen(0.05f);
         }
     }
 
     private void FixedUpdate()
     {
         if (noAI) return;
+        if (outOfBreath) return;
 
         if (!inCombat && (Time.time - _lastCombatTime > _enterCombatCD) && Vector3.SqrMagnitude(_target.transform.position - transform.position) <= (_attackDist * _attackDist))
         {
@@ -107,6 +118,20 @@ public abstract class Enemy : BaseCharacter
         #endregion
     }
 
+    protected void ChooseChargeAttack()
+    {
+        if (Random.Range(1, 101) <= _chanceOfChargeAttak)
+        {
+            _heavyAttack = true;
+            //Debug.Log($"<color=#ff00ff>Tipo de ataque: Liviano</color>");
+        }
+        else
+        {
+            _heavyAttack = false;
+            //Debug.Log($"<color=#ff00ff>Tipo de ataque: Pesado</color>");
+        }
+    }
+
     protected override void EnterCombat()
     {
         //GameManager.Instance.EnemyInCombat = this;
@@ -126,14 +151,17 @@ public abstract class Enemy : BaseCharacter
         Cursor.visible = true; ;
     }
 
-    public override void TakeDamage(float dmg, AttackDirectionList attackDir)
+    public override void TakeDamage(float dmg, AttackDirectionList attackDir, bool chargeAttack)
     {
         var num = Random.Range(0, _chanceOfBlock);
         //Debug.Log($"<color=magenta>Numero Random {num} Chance en int {(int)_currentBlockChance}</color>");
-        if (num < (int)_currentBlockChance)
+        if (!outOfBreath && !chargeAttack && num < (int)_currentBlockChance)
             DoBlock();
         else
-            base.TakeDamage(dmg, attackDir);
+        {
+            base.TakeDamage(dmg, attackDir, chargeAttack);
+
+        }
     }
 
     protected override void ExitCombat()
@@ -146,6 +174,7 @@ public abstract class Enemy : BaseCharacter
 
         ResetAttackSpeed();
         ResetBlockChance();
+        ResetStamRegen();
 
         GameManager.Instance.OnCombatExit -= ExitCombat;
         GameManager.Instance.OnCombatEnter += EnterCombat;

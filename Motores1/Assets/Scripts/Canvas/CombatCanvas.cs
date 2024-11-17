@@ -20,7 +20,7 @@ public class CombatCanvas : MonoBehaviour
 
     }
 
-    public void ActivateDanger(BaseCharacter.AttackDirectionList attackDir, BaseCharacter attacker, float damage, float attackSpeed)
+    public void ActivateDanger(BaseCharacter.AttackDirectionList attackDir, BaseCharacter attacker, float damage, float attackSpeed, bool isChargeAttack)
     {
         foreach (var img in _attackAreas)
         {
@@ -32,7 +32,7 @@ public class CombatCanvas : MonoBehaviour
         }
 
         _attackAreas[(int)attackDir].gameObject.SetActive(true);
-        _attackAreas[(int)attackDir].gameObject.GetComponent<AttackCanvas>().StartAttack(attackDir, attacker, damage, attackSpeed);
+        _attackAreas[(int)attackDir].gameObject.GetComponent<AttackCanvas>().StartAttack(attackDir, attacker, damage, attackSpeed, isChargeAttack);
 
         _centros[(int)attackDir].gameObject.SetActive(true);
 

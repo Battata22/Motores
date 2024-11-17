@@ -28,6 +28,11 @@ public class StaminaControl
             StaminaRegen(ref ownerStamina);
     }
 
+    public void UpdateStamRegen(float newRegenRate)
+    {
+        _regenRate = newRegenRate;
+    }
+
 
     public void DecreseStamina(ref float ownerStamina ,float staminaCost)
     {
@@ -42,7 +47,7 @@ public class StaminaControl
 
     private void StaminaRegen(ref float ownerStamina)
     {
-        //Debug.Log("estamina regen llamado");
+        Debug.Log($"<color=green> {_myOwner} Regenerado estamina | Regen rate {_regenRate} </color>");
         float inCombatMult;
         if (_myOwner.inCombat)
             inCombatMult = 0.3f;

@@ -1,13 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static ArmorPice;
 
 public class ArmorControl
 {
     BaseCharacter _myOwner;
 
     //int _armor;
-    public float _headArmor, _chestArmor, _legsArmor;
+    public int _headArmor, _chestArmor, _legsArmor;
 
     public ArmorControl(BaseCharacter myOwner)
     {
@@ -82,6 +83,31 @@ public class ArmorControl
             case ArmorPice.ArmorType.Leggings:
                 _legsArmor = (int)armorQuality;
                 Debug.Log($"Pantalones equipado {_legsArmor}");
+                break;
+        }
+    }
+
+    public void UpgradeArmor(ArmorPice.ArmorType armorType)
+    {
+        switch (armorType)
+        {
+            case ArmorPice.ArmorType.Helmet:
+                _headArmor ++;
+                if(_headArmor > (int)ArmorPice.ArmorQuality.High)
+                    _headArmor = (int)ArmorPice.ArmorQuality.High;
+                Debug.Log($"Casco Mejorado a {(ArmorPice.ArmorQuality)_headArmor}");
+                break;
+            case ArmorPice.ArmorType.Chestplate:
+                _chestArmor ++;
+                if (_chestArmor > (int)ArmorPice.ArmorQuality.High)
+                    _chestArmor = (int)ArmorPice.ArmorQuality.High;
+                Debug.Log($"Pechera Mejorado a {(ArmorPice.ArmorQuality)_chestArmor}");
+                break;
+            case ArmorPice.ArmorType.Leggings:
+                _legsArmor ++;
+                if (_legsArmor > (int)ArmorPice.ArmorQuality.High)
+                    _legsArmor = (int)ArmorPice.ArmorQuality.High;
+                Debug.Log($"Pantalones Mejorado a {(ArmorPice.ArmorQuality)_legsArmor}");
                 break;
         }
     }
