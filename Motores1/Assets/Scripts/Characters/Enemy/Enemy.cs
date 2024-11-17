@@ -16,14 +16,19 @@ public abstract class Enemy : BaseCharacter
     [SerializeField] protected float _enterCombatCD;
     float _lastCombatTime = -1;
 
+    bool noAI = false;
+
     protected override void Awake()
     {
         base.Awake();
         _currentBlockChance = _chanceOfBlock;
+        GameManager.Instance.OnShopActive += DisableAI;
+        GameManager.Instance.OnShopDisable += EnableAI;
     }
 
     private void Update()
     {
+        if (noAI) return;
         _myLifeSaver.FakeUpdate();
 
         if (inCombat && Time.time - _lastAttack > _currentAtkSpd)
@@ -50,8 +55,11 @@ public abstract class Enemy : BaseCharacter
 
     private void FixedUpdate()
     {
+        if (noAI) return;
+
         if (!inCombat && (Time.time - _lastCombatTime > _enterCombatCD) && Vector3.SqrMagnitude(_target.transform.position - transform.position) <= (_attackDist * _attackDist))
         {
+            GameManager.Instance.EnemyInCombat = this;
             GameManager.Instance.EnterCombat();
             GameManager.Instance.CamRotation.LookAtMe(transform);
         }
@@ -101,7 +109,7 @@ public abstract class Enemy : BaseCharacter
 
     protected override void EnterCombat()
     {
-        GameManager.Instance.EnemyInCombat = this;
+        //GameManager.Instance.EnemyInCombat = this;
 
         Debug.Log($"{gameObject.name} Enter combat mode");
         _canMove = false;
@@ -121,7 +129,7 @@ public abstract class Enemy : BaseCharacter
     public override void TakeDamage(float dmg, AttackDirectionList attackDir)
     {
         var num = Random.Range(0, _chanceOfBlock);
-        Debug.Log($"<color=magenta>Numero Random {num} Chance en int {(int)_currentBlockChance}</color>");
+        //Debug.Log($"<color=magenta>Numero Random {num} Chance en int {(int)_currentBlockChance}</color>");
         if (num < (int)_currentBlockChance)
             DoBlock();
         else
@@ -130,7 +138,7 @@ public abstract class Enemy : BaseCharacter
 
     protected override void ExitCombat()
     {
-        GameManager.Instance.EnemyInCombat = null;
+        //GameManager.Instance.EnemyInCombat = null;
 
         Debug.Log($"{gameObject.name} Exit combat mode");
         _canMove = true;
@@ -172,7 +180,23 @@ public abstract class Enemy : BaseCharacter
     void ResetBlockChance()
     {
         _currentBlockChance = _chanceOfBlock;
-    }
-    
+    }   
 
+    void DisableAI()
+    {
+        noAI = true;
+    }
+
+    void EnableAI()
+    {
+        noAI = false;
+    }
+
+    private void OnDestroy()
+    {
+        GameManager.Instance.OnShopActive -= DisableAI;
+        GameManager.Instance.OnShopDisable -= EnableAI;
+        GameManager.Instance.OnCombatExit -= ExitCombat;
+        GameManager.Instance.OnCombatEnter -= EnterCombat;
+    }
 }

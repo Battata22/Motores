@@ -29,6 +29,7 @@ public class CamRotation : MonoBehaviour
         Cursor.visible = false;
 
         GameManager.Instance.OnCombatEnter += DisableRotation;
+        GameManager.Instance.OnShopActive += DisableRotation;
     }
 
     private void Update()
@@ -110,6 +111,9 @@ public class CamRotation : MonoBehaviour
 
         GameManager.Instance.OnCombatEnter -= DisableRotation;
         GameManager.Instance.OnCombatExit += EnableRotation;
+
+        GameManager.Instance.OnShopActive -= DisableRotation;
+        GameManager.Instance.OnShopDisable += EnableRotation;
     }
 
     void EnableRotation()
@@ -120,6 +124,9 @@ public class CamRotation : MonoBehaviour
 
         GameManager.Instance.OnCombatExit -= EnableRotation;
         GameManager.Instance.OnCombatEnter += DisableRotation;
+
+        GameManager.Instance.OnShopDisable   -= EnableRotation;
+        GameManager.Instance.OnShopActive += DisableRotation;
     }
 
     public void LookAtMe(Transform target)

@@ -14,8 +14,9 @@ namespace PlayerInput
         //cambio de Input a KeyCode
 
         public KeyCode usePotion = KeyCode.E;
-        public int attack = 0;
-        public int block = 1;
+        KeyCode interactKey = KeyCode.F;
+        //public int attack = 0;
+        //public int block = 1;
         public KeyCode kick = KeyCode.V;
         public KeyCode sprint = KeyCode.LeftShift;
         public KeyCode pickUp = KeyCode.LeftControl;
@@ -87,6 +88,10 @@ namespace PlayerInput
             if (Input.GetKeyUp(pickUp))
             {
                 player.CheckPickUp();
+            }
+            if (Input.GetKeyDown(interactKey))
+            {
+                player.TryInteract();
             }
         }
     }

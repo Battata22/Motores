@@ -9,7 +9,6 @@ public class PlayerAttackCanvas : MonoBehaviour
 
     [SerializeField] Player _myOwner;
     private float _myDamage;
-    private float _attackSpeed;
 
     public delegate void AttackCanvasDelegate();
     public event AttackCanvasDelegate AttackCanvas;
@@ -27,14 +26,23 @@ public class PlayerAttackCanvas : MonoBehaviour
 
     private void StartAttack()
     {
+        float stamina;
+        float _attackSpeed;
+        float atkStmCost;
+        bool outOfBreath;
         //_myAttackDir = attackDir;
-        _myDamage = _myOwner.GiveAttackStats(out _attackSpeed);
-        Debug.Log($"Dmg {_myDamage} AtkSpd {_attackSpeed}");
+        _myDamage = _myOwner.GiveAttackStats(out _attackSpeed, out stamina, out atkStmCost,out outOfBreath);
+        //Debug.Log($"Dmg {_myDamage} AtkSpd {_attackSpeed}");
 
-        Attack();
+        if (!outOfBreath && stamina >= atkStmCost)
+            Attack(_attackSpeed);
+        else
+        {
+            Debug.Log("<color=yellow> DEFICIENCIA DE ESTAMINA </color>");
+        }
     }
 
-    void Attack()
+    void Attack(float _attackSpeed)
     {
 
         //Debug.Log($"<color=green>Attacando: {GameManager.Instance.Player}</color><color=red>{_myDamage}</color> dmg, direccion <color=cyan>{_myAttackDir}</color>");

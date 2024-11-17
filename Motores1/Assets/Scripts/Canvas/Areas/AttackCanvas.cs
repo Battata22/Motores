@@ -44,6 +44,11 @@ public class AttackCanvas : MonoBehaviour
 
     void Block()
     {
+        if (GameManager.Instance.Player.outOfBreath) 
+        {
+            Debug.Log("<color=red> TOMATE UN RESPIRO </color>");
+            return;
+        } 
         Debug.Log("<color=red> BLOCK </color>");
 
         _myOwner.BuffAttackSpeed(0.9f);

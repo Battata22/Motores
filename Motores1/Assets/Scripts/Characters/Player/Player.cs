@@ -10,7 +10,7 @@ public class Player : BaseCharacter
     [SerializeField] float _kickDist;
     [SerializeField] float _pickUpRange;
 
-    public int money;
+    [SerializeField] int money;
     public bool blueTeam;
 
     public delegate void VoidDelegateFloat2(float a, float b);
@@ -41,6 +41,7 @@ public class Player : BaseCharacter
         base.Start();
 
         GameManager.Instance.Player = this;
+        GameManager.Instance.OnShopActive += EnterShop;
     }
 
     private void Update()
@@ -138,7 +139,6 @@ public class Player : BaseCharacter
         if (Physics.Raycast(pos, transform.forward, out RaycastHit hit, _kickDist) && hit.transform.TryGetComponent<IKickable>(out IKickable target))
         {
             target.GetKicked();
-
         }
         base.Kick();
     }
@@ -146,6 +146,8 @@ public class Player : BaseCharacter
     public void RunningState(bool coso)
     {
         if (inCombat) return;
+        if (outOfBreath) return;
+
         running = coso;
         if (running)
             _playerMovemente = Run;
@@ -186,6 +188,16 @@ public class Player : BaseCharacter
         }
     }
 
+    public void TryInteract()
+    {
+        var pos = transform.position + new Vector3(0, 1, 0);
+        //pos = transform.position + new Vector3(0, 1, 0);
+        if (Physics.Raycast(pos, transform.forward, out RaycastHit hit, _kickDist) && hit.transform.TryGetComponent<IInteractable>(out IInteractable target))
+        {
+            target.Interact();
+        }
+    }
+
     public void UpdateHpUI()
     {
         _healthBar.fillAmount = _hp / _maxHp;
@@ -193,6 +205,10 @@ public class Player : BaseCharacter
     public void UpdateStaminaUI()
     {
         _staminaBar.fillAmount = _stamina / _maxStamina;
+        if(outOfBreath)
+            _staminaBar.color = Color.yellow;
+        else
+            _staminaBar.color = Color.green;
     }
 
     public void DoBlock()
@@ -200,10 +216,35 @@ public class Player : BaseCharacter
         _myBlock();
     }
 
-    public float GiveAttackStats(out float _atkSpd)
+    public float GiveAttackStats(out float _atkSpd, out float _stm, out float _atkStmCost, out bool _outOfBreath)
     {
         _atkSpd = _currentAtkSpd;
+        _stm = _stamina;
+        _atkStmCost = _staminaCost;
+        _outOfBreath = outOfBreath;
         return _damage;
+    }
+
+    void EnterShop()
+    {
+        GameManager.Instance.Shop.GetPlayerInfo(ref money, this, ref _currentWeapon);
+    }
+    /// <summary>
+    /// If Can Pay return True
+    /// </summary>
+    /// <param name="amount"></param>
+    /// <returns></returns>
+    public bool PayAmount(int amount)
+    {
+        if(amount > money)
+        {
+            return false;
+        }
+        else
+        {
+            money -= amount;
+            return true;
+        }
     }
 
     

@@ -105,7 +105,8 @@ public abstract class BaseCharacter : MonoBehaviour, IKickable
 
     protected virtual void Death() 
     {       
-        print("<color=red> AHHHHHHHH, ME MUUEEROOOOOOOooooooohhhhhh......</color>");
+        print($"<color=red> Murio: {this.name}</color>");
+        Destroy(gameObject);
     }
 
     //Cambiado, Ahora pide 2 floats
@@ -154,9 +155,9 @@ public abstract class BaseCharacter : MonoBehaviour, IKickable
 
     }
 
-    public void AddPotion()
+    public void AddPotion(int amount = 1)
     {
-        potions++;
+        potions += amount;
     }
 
     protected abstract void EnterCombat();
@@ -171,7 +172,7 @@ public abstract class BaseCharacter : MonoBehaviour, IKickable
         GameManager.Instance.ExitCombat();
     }
 
-    public void GetKicked()
+    public virtual void GetKicked()
     {
         Debug.Log($"{gameObject.name} Recive a kick");
         _rb.AddForce(-transform.forward * 10, ForceMode.Impulse);
@@ -256,6 +257,11 @@ public abstract class BaseCharacter : MonoBehaviour, IKickable
     {
         GameManager.Instance.OnCombatEnter -= EnterCombat;
         GameManager.Instance.OnCombatExit -= ExitCombat;
+        if(GameManager.Instance.EnemyInCombat == this)
+        {
+            GameManager.Instance.ExitCombat();
+            //GameManager.Instance.EnemyInCombat = null;
+        }
     }
 
     //Identificador de golpe
