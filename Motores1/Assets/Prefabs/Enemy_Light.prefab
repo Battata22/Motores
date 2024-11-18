@@ -353,7 +353,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &7000627474792970047
 Transform:
   m_ObjectHideFlags: 0
@@ -433,19 +433,32 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _maxHp: 75
+  _hp: 0
   _maxStamina: 120
+  _staminaRegenRate: 40
   _speed: 6
-  _staminaRegenRate: 30
+  _runningSpeed: 0
+  _runningStmCost: 0
   _damage: 0
-  _attackSpeed: 0
+  _baseAttackSpeed: 1
+  _currentAtkSpd: 0
   _currentWeapon: 1
   bleading: 0
   poisoned: 0
+  outOfBreath: 0
   _canMove: 1
   blueTeam: 0
   _target: {fileID: 0}
   _attackDist: 1.5
+  _chanceOfBlock: 50
+  _chanceOfChargeAttak: 20
+  _nerfChancePorcentage: 0.6
+  _currentBlockChance: 0
   _enterCombatCD: 0.5
+  _poisonChance: 33
+  _poisonDuration: 2
+  _bleedChance: 25
+  _bleedDuration: 5
 --- !u!1 &8518285063822671511
 GameObject:
   m_ObjectHideFlags: 0

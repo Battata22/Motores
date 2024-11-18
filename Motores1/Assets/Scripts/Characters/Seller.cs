@@ -139,7 +139,7 @@ public class Seller : BaseCharacter, IInteractable
     {
         //GameManager.Instance.EnemyInCombat = this;
 
-        Debug.Log($"{gameObject.name} Enter combat mode");
+        //Debug.Log($"{gameObject.name} Enter combat mode");
         _canMove = false;
         inCombat = true;
 
@@ -182,7 +182,7 @@ public class Seller : BaseCharacter, IInteractable
     {
         //GameManager.Instance.EnemyInCombat = null;
 
-        Debug.Log($"{gameObject.name} Exit combat mode");
+        //Debug.Log($"{gameObject.name} Exit combat mode");
         _canMove = true;
         inCombat = false;
 

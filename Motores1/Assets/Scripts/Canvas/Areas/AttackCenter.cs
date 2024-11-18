@@ -42,7 +42,7 @@ public class AttackCenter : MonoBehaviour
         //GameManager.Instance.enemyInCombat._attackSpeed = GameManager.Instance.enemyInCombat._attackSpeed - 0.1f;
         //restar tiempo de attack speed del enemigo
 
-        print("le diste al centro");
+        //print("le diste al centro");
     }
 
     private void OnTriggerEnter2D(Collider2D collision)

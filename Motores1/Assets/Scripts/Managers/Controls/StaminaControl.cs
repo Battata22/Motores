@@ -47,7 +47,7 @@ public class StaminaControl
 
     private void StaminaRegen(ref float ownerStamina)
     {
-        Debug.Log($"<color=green> {_myOwner} Regenerado estamina | Regen rate {_regenRate} </color>");
+        //Debug.Log($"<color=green> {_myOwner} Regenerado estamina | Regen rate {_regenRate} </color>");
         float inCombatMult;
         if (_myOwner.inCombat)
             inCombatMult = 0.3f;

@@ -19,7 +19,7 @@ public class PlayerAttackCanvas : MonoBehaviour
     {
         if (dentro && Input.GetMouseButtonUp(0))
         {
-            Debug.Log("CLICK DETECTADO");
+            //Debug.Log("CLICK DETECTADO");
             StartAttack();
         }
     }
@@ -56,6 +56,7 @@ public class PlayerAttackCanvas : MonoBehaviour
             _myOwner._myAttack();
 
         _myOwner.BuffAttackSpeed(0.8f);
+        _myOwner.BuffStamRegen(0.5f);
 
     }
 

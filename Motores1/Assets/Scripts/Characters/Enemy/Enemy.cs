@@ -136,7 +136,7 @@ public abstract class Enemy : BaseCharacter
     {
         //GameManager.Instance.EnemyInCombat = this;
 
-        Debug.Log($"{gameObject.name} Enter combat mode");
+        //Debug.Log($"{gameObject.name} Enter combat mode");
         _canMove = false;
         inCombat = true;
 
@@ -168,7 +168,7 @@ public abstract class Enemy : BaseCharacter
     {
         //GameManager.Instance.EnemyInCombat = null;
 
-        Debug.Log($"{gameObject.name} Exit combat mode");
+        //Debug.Log($"{gameObject.name} Exit combat mode");
         _canMove = true;
         inCombat = false;
 
@@ -227,5 +227,12 @@ public abstract class Enemy : BaseCharacter
         GameManager.Instance.OnShopDisable -= EnableAI;
         GameManager.Instance.OnCombatExit -= ExitCombat;
         GameManager.Instance.OnCombatEnter -= EnterCombat;
+    }
+
+    protected override void Death()
+    {
+        GameManager.Instance.WinCombat();
+        GameManager.Instance.Player.AddMoney(60);
+        base.Death();
     }
 }

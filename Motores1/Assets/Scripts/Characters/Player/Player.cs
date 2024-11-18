@@ -32,10 +32,21 @@ public class Player : BaseCharacter
     [SerializeField] AttackDirectionList dev_attackDirection;
     [SerializeField] ArmorPice.ArmorType[] dev_armorEquiped;
     [SerializeField] ArmorPice.ArmorQuality[] dev_armorQuality;
-
+    bool _inmortal = false;
     protected override void Awake()
     {
         base.Awake();
+        if (PlayerPrefs.HasKey("potions"))
+            AddPotion(PlayerPrefs.GetInt("potions"));
+        if (PlayerPrefs.HasKey("chestQuality"))
+            SetArmor(ArmorPice.ArmorType.Chestplate, (ArmorPice.ArmorQuality)PlayerPrefs.GetInt("chestQuality"));
+        if (PlayerPrefs.HasKey("helmetQuality"))
+            SetArmor(ArmorPice.ArmorType.Chestplate, (ArmorPice.ArmorQuality)PlayerPrefs.GetInt("helmetQuality"));
+        if (PlayerPrefs.HasKey("legsQuality"))
+            SetArmor(ArmorPice.ArmorType.Chestplate, (ArmorPice.ArmorQuality)PlayerPrefs.GetInt("legsQuality"));
+        if (PlayerPrefs.HasKey("money"))
+            AddMoney(PlayerPrefs.GetInt("money"));
+        
         _myStaminaControl.OnOutOfBreath += RunningState;
         _playerMovemente = Movement;
         myControl = new PlayerControl(this);
@@ -62,7 +73,9 @@ public class Player : BaseCharacter
         #region Dev Inputs
         if (Input.GetKeyDown(KeyCode.F1))
         {
-            TakeDamage(dev_damagePlayer, dev_attackDirection, false);
+            //TakeDamage(dev_damagePlayer, dev_attackDirection, false);
+            _inmortal = !_inmortal;
+            Debug.Log($"<color=cyan> Inmortal = {_inmortal} </color>");
         }
         if (Input.GetKeyDown(KeyCode.F2))
         {
@@ -76,17 +89,17 @@ public class Player : BaseCharacter
             Debug.Log($"<color=#e88ced> Vida al maximo <3 </color>");
             _hp = _maxHp;
         }
-        if(Input.GetKeyDown(KeyCode.F4))
-        {
-            Debug.Log($"<color=green>Veneno Activado </color>");
-            StartPoison(5f);
-        }
-        if (Input.GetKeyDown(KeyCode.F5))
-        {
-            Debug.Log($"<color=red>Sangrado Activado </color>");
-            StartBleed(10f);
-        }
-        if(Input.GetKeyDown(KeyCode.F6))
+        //if(Input.GetKeyDown(KeyCode.F4))
+        //{
+        //    Debug.Log($"<color=green>Veneno Activado </color>");
+        //    StartPoison(5f);
+        //}
+        //if (Input.GetKeyDown(KeyCode.F5))
+        //{
+        //    Debug.Log($"<color=red>Sangrado Activado </color>");
+        //    StartBleed(10f);
+        //}
+        if(Input.GetKeyDown(KeyCode.F3))
         {
             Debug.Log("Frenado Bleed y Posion");
             StopBleed();
@@ -119,6 +132,11 @@ public class Player : BaseCharacter
         _myStaminaControl.DecreseStamina(ref _stamina, _runningStmCost * Time.deltaTime);
     }
 
+    public override void TakeDamage(float dmg, AttackDirectionList attackDir, bool chargeAttack)
+    {
+        if (_inmortal) return;
+        base.TakeDamage(dmg, attackDir, chargeAttack);
+    }
     public override void UsePotion()
     {
         if(potions <= 0)
@@ -138,6 +156,13 @@ public class Player : BaseCharacter
         _myHealthSystem.CalcHeal(ref _hp ,GameManager.Instance.potionHealAmount);
         potions--;
         base.UsePotion();
+    }
+
+    public override void AddPotion(int amount = 1)
+    {
+        base.AddPotion(amount);
+        PlayerPrefs.SetInt("potions", potions);
+        Debug.Log($"<color=green>Current potions {potions}</color>");
     }
 
     public override void Kick()
@@ -167,6 +192,24 @@ public class Player : BaseCharacter
             _playerMovemente = Run;
         else
             _playerMovemente = Movement;
+    }
+
+    public override void SetArmor(ArmorPice.ArmorType newArmor, ArmorPice.ArmorQuality newArmorQuality)
+    {
+        base.SetArmor(newArmor, newArmorQuality);
+        //Guardar Armor Quality
+        switch (newArmor)
+        {
+            case ArmorPice.ArmorType.Chestplate:
+                PlayerPrefs.SetInt("chestQuality", (int)newArmorQuality);
+                break;
+            case ArmorPice.ArmorType.Helmet:
+                PlayerPrefs.SetInt("helmetQuality", (int)newArmorQuality);
+                break;
+            case ArmorPice.ArmorType.Leggings:
+                PlayerPrefs.SetInt("legsQuality", (int)newArmorQuality);
+                break;
+        }
     }
 
     protected override void EnterCombat()
@@ -261,13 +304,24 @@ public class Player : BaseCharacter
         else
         {
             money -= amount;
+            PlayerPrefs.SetInt("money", money);
             return true;
         }
     }
 
+    public void AddMoney(int amount)
+    {
+        //Debug.Log($"{money}, {amount}, {PlayerPrefs.GetInt("money")}");
+        money += amount;
+        PlayerPrefs.SetInt("money", money);
+        //Debug.Log($"{money}, {amount}, {PlayerPrefs.GetInt("money")}");
+    }
+
+
+
     protected override void Death()
     {
         print($"<color=red> Murio: {this.name}</color>");
-
+        GameManager.Instance.ChangeScenManager.CallSceneChange(-1);
     }
 }

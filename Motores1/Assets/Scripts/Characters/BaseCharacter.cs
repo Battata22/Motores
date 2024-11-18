@@ -74,7 +74,12 @@ public abstract class BaseCharacter : MonoBehaviour, IKickable
         _currentStaminaRegen = _staminaRegenRate;
         _myStaminaControl = new StaminaControl(this, _currentStaminaRegen, _maxStamina);
         _myLifeSaver = new LifeSaver(this.transform);
-        SetWeapon(_currentWeapon);
+        
+        if (PlayerPrefs.HasKey("currentWeapon"))
+            SetWeapon((Weapon.WeaponType)PlayerPrefs.GetInt("currentWeapon"));
+        else
+            SetWeapon(_currentWeapon);
+
         ResetAttackSpeed();
         //CallDOTs += delegate { };
       
@@ -98,6 +103,7 @@ public abstract class BaseCharacter : MonoBehaviour, IKickable
         //Debug.Log($"<color=green>{this.name} </color>| Raw Damage: <color=red>{dmg} </color>| Direccion: <color=cyan>{attackDir} " +
         //    $"</color>| Cuerrent Life <color=#ff00ff> {_hp}</color>");
 
+        Debug.Log($"<color=magenta> {this.name} Recivio Daño </color>");
         if(_hp < 0 )
         {
             _hp = 0;
@@ -158,9 +164,10 @@ public abstract class BaseCharacter : MonoBehaviour, IKickable
 
     }
 
-    public void AddPotion(int amount = 1)
+    public virtual void AddPotion(int amount = 1)
     {
         potions += amount;
+
     }
 
     protected abstract void EnterCombat();
@@ -215,7 +222,7 @@ public abstract class BaseCharacter : MonoBehaviour, IKickable
                 break;
         }
 
-
+        PlayerPrefs.SetInt("currentWeapon", (int)_currentWeapon);
         Debug.Log($"Current Weapon: {_currentWeapon}");
 
     }
@@ -223,6 +230,8 @@ public abstract class BaseCharacter : MonoBehaviour, IKickable
     public virtual void SetArmor(ArmorPice.ArmorType newArmor, ArmorPice.ArmorQuality newArmorQuality) 
     {
         _myArmorControl.SetArmor(newArmor, newArmorQuality);
+        
+        
     }
 
     public virtual void UpgradeArmor(ArmorPice.ArmorType toUpgrade)

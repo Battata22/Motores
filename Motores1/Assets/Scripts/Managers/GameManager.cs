@@ -33,14 +33,17 @@ public class GameManager : MonoBehaviour
     public GameObject mouseCenterGO;
     public BaseCharacter EnemyInCombat;
     public ShopCanvas Shop;
+    public ChangeSceneManager ChangeScenManager;
 
     [SerializeField] public float potionHealAmount;
     [SerializeField] public float poisonDamage;
     [SerializeField] public float bleedDamage;
 
     public delegate void VoidDelegate();
-    public event VoidDelegate OnCombatEnter = delegate { }, OnCombatExit = delegate { };
+    public event VoidDelegate OnCombatEnter = delegate { }, OnCombatExit = delegate { }, OncombatWin = delegate { };
     public event VoidDelegate OnShopActive = delegate { }, OnShopDisable = delegate { };
+
+
     public void EnterCombat()
     {
         //CombatCanvas.gameObject.SetActive(true);
@@ -61,6 +64,11 @@ public class GameManager : MonoBehaviour
         //liberar player
         //liberar enemigos
         //mover cam a zoom normal
+    }
+
+    public void WinCombat()
+    {
+        OncombatWin();
     }
 
     public void EnterShop()

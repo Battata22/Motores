@@ -180,19 +180,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0427f5128df024b4ca6226ac69f4cbf7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _maxHp: 100
+  _maxHp: 20
+  _hp: 0
   _maxStamina: 100
-  _speed: 5
   _staminaRegenRate: 20
+  _speed: 5
+  _runningSpeed: 0
+  _runningStmCost: 0
   _damage: 0
-  _attackSpeed: 0
+  _baseAttackSpeed: 2
+  _currentAtkSpd: 0
   _currentWeapon: 2
   bleading: 0
   poisoned: 0
+  outOfBreath: 0
   _canMove: 1
   blueTeam: 0
   _target: {fileID: 0}
   _attackDist: 2
+  _chanceOfBlock: 100
+  _chanceOfChargeAttak: 33
+  _nerfChancePorcentage: 0.5
+  _currentBlockChance: 0
   _enterCombatCD: 0.5
 --- !u!1 &2259684333077648587
 GameObject:

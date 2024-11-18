@@ -67,12 +67,12 @@ namespace PlayerInput
                 if (!chargedAttack)
                 {
                     player._myAttack();
-                    Debug.Log($"<color=red> Player Attack </color>");
+                    Debug.Log($"<color=cyan> Player Attack </color>");
                 }
                 else
                 {
                     player._myChargeAttack();
-                    Debug.Log($"<color=red> Player Charge Attack </color>");
+                    Debug.Log($"<color=cyan> Player Charge Attack </color>");
                 }
                 chargedAttack = false;
                 chargeTime = 0;
@@ -86,12 +86,12 @@ namespace PlayerInput
             if (Input.GetMouseButtonDown(1))
             {
                 //player._myBlock();
-                Debug.Log($"<color=blue> Player Guard Up </color>");
+                //Debug.Log($"<color=blue> Player Guard Up </color>");
             }
             if (Input.GetMouseButtonUp(1))
             {
                 //player.EndBlock()
-                Debug.Log($"<color=blue> Player Guard Down </color>");
+                //Debug.Log($"<color=blue> Player Guard Down </color>");
             }
             if (Input.GetKeyDown(kick))
             {
