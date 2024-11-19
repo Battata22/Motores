@@ -2,17 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Daggers : MonoBehaviour
+public class Daggers : MonoBehaviour, IPickeable
 {
-    // Start is called before the first frame update
-    void Start()
+    public void PickUp(BaseCharacter baseChar)
     {
-        
-    }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }

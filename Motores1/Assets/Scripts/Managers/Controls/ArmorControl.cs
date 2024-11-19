@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using static ArmorPice;
 
+//Carranza Gonzalo
+
 public class ArmorControl
 {
     BaseCharacter _myOwner;

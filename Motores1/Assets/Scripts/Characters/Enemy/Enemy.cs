@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+//Carranza Gonzalo
+
 public abstract class Enemy : BaseCharacter
 {
     [Header("<color=red>Base Enemy Setings</color>")]

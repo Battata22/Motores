@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+//Carranza Gonzalo
+
 public class GameManager : MonoBehaviour
 {
     #region Singleton

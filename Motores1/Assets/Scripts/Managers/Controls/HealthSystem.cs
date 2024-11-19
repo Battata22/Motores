@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+//Carranza Gonzalo
+
 public class HealthSystem
 {
     BaseCharacter _myOwner;
@@ -43,10 +45,5 @@ public class HealthSystem
         float resultHeal = healAmount;
 
         ownerHp += resultHeal;
-    }
-
-    void Death()
-    {
-
     }
 }
