@@ -2,7 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-//Carranza Gonzalo
+//Carranza Gonzalo, El capo de la mafia
+//Corbalan Martin, El apoyo emocional y psicologico
 
 [RequireComponent(typeof(Rigidbody))]
 public abstract class BaseCharacter : MonoBehaviour, IKickable
