@@ -7,6 +7,8 @@ public class CombatCanvas : MonoBehaviour
 {
     [SerializeField] RawImage[] _attackAreas, _centros;
 
+    //Las partes mal hechas fueron creadas por Gianluca :)
+
     /// <summary>
     /// USAR COMO EVENTO, SOLO USAR += o -=
     /// </summary>
