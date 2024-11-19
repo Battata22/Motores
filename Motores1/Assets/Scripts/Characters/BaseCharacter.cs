@@ -4,6 +4,7 @@ using UnityEngine;
 
 //Carranza Gonzalo, El capo de la mafia
 //Corbalan Martin, El apoyo emocional y psicologico
+//Lorenzo Solari, El sobreviviente de la nieve
 
 [RequireComponent(typeof(Rigidbody))]
 public abstract class BaseCharacter : MonoBehaviour, IKickable

@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+//Lorenzo Solari (ayuda)
 public class ArmorPice : MonoBehaviour, IPickeable
 {
     public enum ArmorType
