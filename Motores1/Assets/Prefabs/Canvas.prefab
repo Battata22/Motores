@@ -1265,12 +1265,12 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1901919104818204617}
         m_TargetAssemblyTypeName: ShopCanvas, Assembly-CSharp
-        m_MethodName: BuyChest
-        m_Mode: 1
+        m_MethodName: BuyItem
+        m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
+          m_IntArgument: 1
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
@@ -1398,12 +1398,12 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1901919104818204617}
         m_TargetAssemblyTypeName: ShopCanvas, Assembly-CSharp
-        m_MethodName: BuySandShield
-        m_Mode: 1
+        m_MethodName: BuyItem
+        m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
+          m_IntArgument: 4
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
@@ -1944,12 +1944,12 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1901919104818204617}
         m_TargetAssemblyTypeName: ShopCanvas, Assembly-CSharp
-        m_MethodName: BuyGreatSword
-        m_Mode: 1
+        m_MethodName: BuyItem
+        m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
+          m_IntArgument: 5
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
@@ -2077,12 +2077,12 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1901919104818204617}
         m_TargetAssemblyTypeName: ShopCanvas, Assembly-CSharp
-        m_MethodName: BuySword
-        m_Mode: 1
+        m_MethodName: BuyItem
+        m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
+          m_IntArgument: 3
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
@@ -2882,12 +2882,12 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1901919104818204617}
         m_TargetAssemblyTypeName: ShopCanvas, Assembly-CSharp
-        m_MethodName: BuyPants
-        m_Mode: 1
+        m_MethodName: BuyItem
+        m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
+          m_IntArgument: 2
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
@@ -3146,6 +3146,14 @@ MonoBehaviour:
   armorQuality: 0
   armorCost: 10
   weaponCost: 10
+  shopItems:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
 --- !u!1 &3712166172998529047
 GameObject:
   m_ObjectHideFlags: 0
@@ -4876,12 +4884,12 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1901919104818204617}
         m_TargetAssemblyTypeName: ShopCanvas, Assembly-CSharp
-        m_MethodName: BuyPotion
-        m_Mode: 1
+        m_MethodName: BuyItem
+        m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
+          m_IntArgument: 6
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
@@ -7078,8 +7086,8 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1901919104818204617}
         m_TargetAssemblyTypeName: ShopCanvas, Assembly-CSharp
-        m_MethodName: BuyHelmet
-        m_Mode: 1
+        m_MethodName: BuyItem
+        m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine

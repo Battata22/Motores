@@ -47,6 +47,8 @@ public class Seller : BaseCharacter, IInteractable
     private void Update()
     {
         _myLifeSaver.FakeUpdate();
+        _myStaminaControl.FakeUpdate(ref _stamina);
+
 
         #region WhileAngry
         DoAttack(); 

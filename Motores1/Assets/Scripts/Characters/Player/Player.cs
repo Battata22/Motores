@@ -7,6 +7,8 @@ using static UnityEngine.GraphicsBuffer;
 
 public class Player : BaseCharacter
 {
+    public Weapon.WeaponType playerWeapon { get { return _currentWeapon; } protected set { } }
+
     [SerializeField] GameObject _mesh;
     [SerializeField] float _kickDist;
     [SerializeField] float _pickUpRange;
@@ -30,8 +32,8 @@ public class Player : BaseCharacter
     [Header("<color=green> Developer test </color>")]
     [SerializeField] float dev_damagePlayer;
     [SerializeField] AttackDirectionList dev_attackDirection;
-    [SerializeField] ArmorPice.ArmorType[] dev_armorEquiped;
-    [SerializeField] ArmorPice.ArmorQuality[] dev_armorQuality;
+    [SerializeField] Armor.Type[] dev_armorEquiped;
+    [SerializeField] Armor.Quality[] dev_armorQuality;
     bool _inmortal = false;
     protected override void Awake()
     {
@@ -39,11 +41,11 @@ public class Player : BaseCharacter
         if (PlayerPrefs.HasKey("potions"))
             AddPotion(PlayerPrefs.GetInt("potions"));
         if (PlayerPrefs.HasKey("chestQuality"))
-            SetArmor(ArmorPice.ArmorType.Chestplate, (ArmorPice.ArmorQuality)PlayerPrefs.GetInt("chestQuality"));
+            SetArmor(Armor.Type.Chestplate, (Armor.Quality)PlayerPrefs.GetInt("chestQuality"));
         if (PlayerPrefs.HasKey("helmetQuality"))
-            SetArmor(ArmorPice.ArmorType.Chestplate, (ArmorPice.ArmorQuality)PlayerPrefs.GetInt("helmetQuality"));
+            SetArmor(Armor.Type.Chestplate, (Armor.Quality)PlayerPrefs.GetInt("helmetQuality"));
         if (PlayerPrefs.HasKey("legsQuality"))
-            SetArmor(ArmorPice.ArmorType.Chestplate, (ArmorPice.ArmorQuality)PlayerPrefs.GetInt("legsQuality"));
+            SetArmor(Armor.Type.Chestplate, (Armor.Quality)PlayerPrefs.GetInt("legsQuality"));
         if (PlayerPrefs.HasKey("money"))
             AddMoney(PlayerPrefs.GetInt("money"));
         
@@ -58,7 +60,7 @@ public class Player : BaseCharacter
         base.Start();
 
         GameManager.Instance.Player = this;
-        GameManager.Instance.OnShopActive += EnterShop;
+        //GameManager.Instance.OnShopActive += EnterShop;
     }
 
     private void Update()
@@ -155,6 +157,7 @@ public class Player : BaseCharacter
         Debug.Log($"<color=green> Player Use Potion </color>");
         _myHealthSystem.CalcHeal(ref _hp ,GameManager.Instance.potionHealAmount);
         potions--;
+        GameManager.Instance.AddToRunStats("Potions Used", 1);
         base.UsePotion();
     }
 
@@ -194,19 +197,19 @@ public class Player : BaseCharacter
             _playerMovemente = Movement;
     }
 
-    public override void SetArmor(ArmorPice.ArmorType newArmor, ArmorPice.ArmorQuality newArmorQuality)
+    public override void SetArmor(Armor.Type newArmor, Armor.Quality newArmorQuality)
     {
         base.SetArmor(newArmor, newArmorQuality);
         //Guardar Armor Quality
         switch (newArmor)
         {
-            case ArmorPice.ArmorType.Chestplate:
+            case Armor.Type.Chestplate:
                 PlayerPrefs.SetInt("chestQuality", (int)newArmorQuality);
                 break;
-            case ArmorPice.ArmorType.Helmet:
+            case Armor.Type.Helmet:
                 PlayerPrefs.SetInt("helmetQuality", (int)newArmorQuality);
                 break;
-            case ArmorPice.ArmorType.Leggings:
+            case Armor.Type.Leggings:
                 PlayerPrefs.SetInt("legsQuality", (int)newArmorQuality);
                 break;
         }
@@ -286,10 +289,12 @@ public class Player : BaseCharacter
         return _damage;
     }
 
-    void EnterShop()
-    {
-        GameManager.Instance.Shop.GetPlayerInfo(this, ref _currentWeapon);
-    }
+    //void EnterShop()
+    //{
+    //    GameManager.Instance.Shop.GetPlayerInfo(this, ref _currentWeapon);
+    //}
+
+
     /// <summary>
     /// If Can Pay return True
     /// </summary>
@@ -314,6 +319,10 @@ public class Player : BaseCharacter
         //Debug.Log($"{money}, {amount}, {PlayerPrefs.GetInt("money")}");
         money += amount;
         PlayerPrefs.SetInt("money", money);
+
+
+        GameManager.Instance.AddToRunStats("Money Earned", amount);
+        
         //Debug.Log($"{money}, {amount}, {PlayerPrefs.GetInt("money")}");
     }
 
@@ -322,6 +331,9 @@ public class Player : BaseCharacter
     protected override void Death()
     {
         print($"<color=red> Murio: {this.name}</color>");
+
+        GameManager.Instance.AddToRunStats("Deaths", 1);
+
         GameManager.Instance.ChangeScenManager.CallSceneChange(-1);
     }
 }

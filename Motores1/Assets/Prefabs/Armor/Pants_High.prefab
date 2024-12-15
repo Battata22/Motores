@@ -300,7 +300,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &376802974176190589
 Transform:
   m_ObjectHideFlags: 0
@@ -329,8 +329,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bbcbb313f99e79d48ab7c6563852a87d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  armorType: 2
-  armorQuality: 3
+  price: 0
+  thisArmor:
+    type: 2
+    quality: 3
+  test: {x: 0, y: 0, z: 0}
 --- !u!65 &9143203571287478883
 BoxCollider:
   m_ObjectHideFlags: 0

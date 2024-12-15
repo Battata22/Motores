@@ -46,8 +46,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bbcbb313f99e79d48ab7c6563852a87d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  armorType: 0
-  armorQuality: 1
+  price: 10
+  thisArmor:
+    type: 0
+    quality: 1
 --- !u!136 &7909261769571915792
 CapsuleCollider:
   m_ObjectHideFlags: 0

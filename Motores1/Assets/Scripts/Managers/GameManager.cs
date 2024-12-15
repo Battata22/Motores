@@ -45,7 +45,17 @@ public class GameManager : MonoBehaviour
     public event VoidDelegate OnCombatEnter = delegate { }, OnCombatExit = delegate { }, OncombatWin = delegate { };
     public event VoidDelegate OnShopActive = delegate { }, OnShopDisable = delegate { };
 
+    public Dictionary<string, float> runStats = new Dictionary<string, float>();
 
+    #region Update temporal para debug
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.F12))
+        {
+            ShowRunStats();
+        }
+    }
+    #endregion
     public void EnterCombat()
     {
         //CombatCanvas.gameObject.SetActive(true);
@@ -91,5 +101,20 @@ public class GameManager : MonoBehaviour
         Cursor.visible = false;
     }
 
+    public void AddToRunStats(string key, float value)
+    {
+        if(!runStats.ContainsKey(key))
+            runStats.Add(key, value);
+        else
+            runStats[key] += value;
+    }
+
+    public void ShowRunStats()
+    {
+        foreach (var stat in runStats)
+        {
+            Debug.Log($"<color=yellow> {stat.Key}: {stat.Value} </color>");
+        }
+    }
     
 }

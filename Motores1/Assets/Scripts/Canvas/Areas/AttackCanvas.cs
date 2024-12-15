@@ -84,6 +84,9 @@ public class AttackCanvas : MonoBehaviour
         centro.SetActive(false);
 
         print("le diste al cuadrado");
+
+        GameManager.Instance.AddToRunStats("Blocks Done", 1);
+
     }
 
     public void ParryDetected(bool youKnow)

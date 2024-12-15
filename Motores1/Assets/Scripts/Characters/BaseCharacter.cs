@@ -119,6 +119,9 @@ public abstract class BaseCharacter : MonoBehaviour, IKickable
     {       
         print($"<color=red> Murio: {this.name}</color>");
         GameManager.Instance.ExitCombat();
+
+        GameManager.Instance.AddToRunStats("Enemies Killed", 1);
+
         Destroy(gameObject);
     }
 
@@ -231,14 +234,14 @@ public abstract class BaseCharacter : MonoBehaviour, IKickable
 
     }
 
-    public virtual void SetArmor(ArmorPice.ArmorType newArmor, ArmorPice.ArmorQuality newArmorQuality) 
+    public virtual void SetArmor(Armor.Type newArmor, Armor.Quality newArmorQuality) 
     {
         _myArmorControl.SetArmor(newArmor, newArmorQuality);
         
         
     }
 
-    public virtual void UpgradeArmor(ArmorPice.ArmorType toUpgrade)
+    public virtual void UpgradeArmor(Armor.Type toUpgrade)
     {
         _myArmorControl.UpgradeArmor(toUpgrade);
     }

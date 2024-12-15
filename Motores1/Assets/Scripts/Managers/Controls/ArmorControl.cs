@@ -70,46 +70,46 @@ public class ArmorControl
         return result;
     }
 
-    public void SetArmor(ArmorPice.ArmorType armorType, ArmorPice.ArmorQuality armorQuality)
+    public void SetArmor(Armor.Type armorType, Armor.Quality armorQuality)
     {
         switch(armorType)
         {
-            case ArmorPice.ArmorType.Helmet:
+            case Armor.Type.Helmet:
                 _headArmor = (int)armorQuality;
                 Debug.Log($"Casco equipado {_headArmor}");
                 break;
-            case ArmorPice.ArmorType.Chestplate:
+            case Armor.Type.Chestplate:
                 _chestArmor = (int)armorQuality;
                 Debug.Log($"Pechera equipado {_chestArmor}");
                 break;
-            case ArmorPice.ArmorType.Leggings:
+            case Armor.Type.Leggings:
                 _legsArmor = (int)armorQuality;
                 Debug.Log($"Pantalones equipado {_legsArmor}");
                 break;
         }
     }
 
-    public void UpgradeArmor(ArmorPice.ArmorType armorType)
+    public void UpgradeArmor(Armor.Type armorType)
     {
         switch (armorType)
         {
-            case ArmorPice.ArmorType.Helmet:
+            case Armor.Type.Helmet:
                 _headArmor ++;
-                if(_headArmor > (int)ArmorPice.ArmorQuality.High)
-                    _headArmor = (int)ArmorPice.ArmorQuality.High;
-                Debug.Log($"Casco Mejorado a {(ArmorPice.ArmorQuality)_headArmor}");
+                if(_headArmor > (int)Armor.Quality.High)
+                    _headArmor = (int)Armor.Quality.High;
+                Debug.Log($"Casco Mejorado a {(Armor.Quality)_headArmor}");
                 break;
-            case ArmorPice.ArmorType.Chestplate:
+            case Armor.Type.Chestplate:
                 _chestArmor ++;
-                if (_chestArmor > (int)ArmorPice.ArmorQuality.High)
-                    _chestArmor = (int)ArmorPice.ArmorQuality.High;
-                Debug.Log($"Pechera Mejorado a {(ArmorPice.ArmorQuality)_chestArmor}");
+                if (_chestArmor > (int)Armor.Quality.High)
+                    _chestArmor = (int)Armor.Quality.High;
+                Debug.Log($"Pechera Mejorado a {(Armor.Quality)_chestArmor}");
                 break;
-            case ArmorPice.ArmorType.Leggings:
+            case Armor.Type.Leggings:
                 _legsArmor ++;
-                if (_legsArmor > (int)ArmorPice.ArmorQuality.High)
-                    _legsArmor = (int)ArmorPice.ArmorQuality.High;
-                Debug.Log($"Pantalones Mejorado a {(ArmorPice.ArmorQuality)_legsArmor}");
+                if (_legsArmor > (int)Armor.Quality.High)
+                    _legsArmor = (int)Armor.Quality.High;
+                Debug.Log($"Pantalones Mejorado a {(Armor.Quality)_legsArmor}");
                 break;
         }
     }
