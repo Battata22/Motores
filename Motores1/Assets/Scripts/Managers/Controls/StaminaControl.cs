@@ -2,8 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-//Carranza Gonzalo
-
+//TPFinal - Carranza Gonzalo.
 public class StaminaControl
 {
     BaseCharacter _myOwner;

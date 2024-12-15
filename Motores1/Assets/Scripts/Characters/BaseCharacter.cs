@@ -7,6 +7,8 @@ using UnityEngine;
 //Lorenzo Solari, El sobreviviente de la nieve
 //Gianluca Battaglino, El verdulero que alimento al equipo
 
+//TPFinal - Lorenzo Solari - Carranza Gonzalo - Corbalan Martin - Gianluca Battaglino.
+
 [RequireComponent(typeof(Rigidbody))]
 public abstract class BaseCharacter : MonoBehaviour, IKickable
 {

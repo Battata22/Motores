@@ -9,6 +9,8 @@ public class CombatCanvas : MonoBehaviour
 
     //Las partes mal hechas fueron creadas por Gianluca :)
 
+    //TPFinal - Gianluca Battaglino.
+
     /// <summary>
     /// USAR COMO EVENTO, SOLO USAR += o -=
     /// </summary>
