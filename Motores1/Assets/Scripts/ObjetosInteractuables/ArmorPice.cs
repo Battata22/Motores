@@ -1,10 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using static UnityEditor.Experimental.GraphView.GraphView;
 
-//Lorenzo Solari (ayuda)
-public class ArmorPice : MonoBehaviour, IPickeable
+//TPFinal - Lorenzo Solari.
+public class ArmorPice : ItemComprable, IPickeable
+
 {
     #region Reemplazado por struct de armor
     //public enum ArmorType
