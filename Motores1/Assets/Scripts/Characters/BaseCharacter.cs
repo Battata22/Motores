@@ -41,7 +41,7 @@ public abstract class BaseCharacter : MonoBehaviour, IKickable
     protected float _staminaCost;
 
     //Damage in parts
-    protected bool _isHeadDamage, _isChestDamage, _areLegsDamage;
+    //protected bool _isHeadDamage, _isChestDamage, _areLegsDamage;
 
     protected bool _blocking;
 
