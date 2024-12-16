@@ -4,24 +4,29 @@ using UnityEngine;
 
 public class ShopCanvas : MonoBehaviour
 {
-    [SerializeField] int potionCost;
-    [SerializeField] int potionAmount;
-    [SerializeField] Armor.Quality armorQuality;
-    [SerializeField] int armorCost;
-    [SerializeField] int weaponCost;
+    //[SerializeField] int potionCost;
+    //[SerializeField] int potionAmount;
+    //[SerializeField] Armor.Quality armorQuality;
+    //[SerializeField] int armorCost;
+    //[SerializeField] int weaponCost;
 
     [SerializeField] ItemComprable[] shopItems;
 
-    Player _player;
+    //Player _player;
     //int _playerMoney;
-    Weapon.WeaponType _weaponType;
+    //Weapon.WeaponType _weaponType;
 
-    bool _soldOutChest = false, _soldOutHelmet = false, _soldOutPants = false;
+    //bool _soldOutChest = false, _soldOutHelmet = false, _soldOutPants = false;
 
     private void Start()
     {
         GameManager.Instance.Shop = this;
         gameObject.SetActive(false);
+        shopItems = GetComponentsInChildren<ItemComprable>();
+        foreach(var item in shopItems)
+        {
+            Debug.Log(item.name);
+        }
     }
 
     private void Update()

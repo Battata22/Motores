@@ -4,7 +4,7 @@ using UnityEngine;
 using static UnityEditor.Experimental.GraphView.GraphView;
 
 //Lorenzo Solari (ayuda)
-public class ArmorPice : ItemComprable, IPickeable
+public class ArmorPice : MonoBehaviour, IPickeable
 {
     #region Reemplazado por struct de armor
     //public enum ArmorType
@@ -59,68 +59,68 @@ public class ArmorPice : ItemComprable, IPickeable
 
     }
 
-    public override void BuyItem()
-    {
-        switch(thisArmor.type)
-        {
-            case Armor.Type.Helmet:
-                BuyHelmet();
-                break;
-            case Armor.Type.Chestplate:
-                BuyChest();
-                break;
-            case Armor.Type.Leggings:
-                BuyPants();
-                break;
-            default:
-                Debug.Log("<color=red> TIPO DE ARMADURA COMPRADA INVALIDO </color>");
-                break;
-        }
-    }
+    //public override void BuyItem()
+    //{
+    //    switch(thisArmor.type)
+    //    {
+    //        case Armor.Type.Helmet:
+    //            BuyHelmet();
+    //            break;
+    //        case Armor.Type.Chestplate:
+    //            BuyChest();
+    //            break;
+    //        case Armor.Type.Leggings:
+    //            BuyPants();
+    //            break;
+    //        default:
+    //            Debug.Log("<color=red> TIPO DE ARMADURA COMPRADA INVALIDO </color>");
+    //            break;
+    //    }
+    //}
 
-    public void BuyHelmet()
-    {
-        if (_soldOut)
-        {
-            Debug.Log("<color=red>Mejora ya comprada</color>");
-            return;
-        }
-        if (!GameManager.Instance.Player.PayAmount(price))
-        {
-            Debug.Log("<color=yellow>Dinero insuficiente</color>");
-            return;
-        }
-        GameManager.Instance.Player.UpgradeArmor(Armor.Type.Helmet);
-        _soldOut = true;
-    }
-    public void BuyChest()
-    {
-        if (_soldOut)
-        {
-            Debug.Log("<color=red>Mejora ya comprada</color>");
-            return;
-        }
-        if (!GameManager.Instance.Player.PayAmount(price))
-        {
-            Debug.Log("<color=yellow>Dinero insuficiente</color>");
-            return;
-        }
-        GameManager.Instance.Player.UpgradeArmor(Armor.Type.Chestplate);
-        _soldOut = true;
-    }
-    public void BuyPants()
-    {
-        if (_soldOut)
-        {
-            Debug.Log("<color=red>Mejora ya comprada</color>");
-            return;
-        }
-        if (!GameManager.Instance.Player.PayAmount(price))
-        {
-            Debug.Log("<color=yellow>Dinero insuficiente</color>");
-            return;
-        }
-        GameManager.Instance.Player.UpgradeArmor(Armor.Type.Leggings);
-        _soldOut = true;
-    }
+    //public void BuyHelmet()
+    //{
+    //    if (_soldOut)
+    //    {
+    //        Debug.Log("<color=red>Mejora ya comprada</color>");
+    //        return;
+    //    }
+    //    if (!GameManager.Instance.Player.PayAmount(price))
+    //    {
+    //        Debug.Log("<color=yellow>Dinero insuficiente</color>");
+    //        return;
+    //    }
+    //    GameManager.Instance.Player.UpgradeArmor(Armor.Type.Helmet);
+    //    _soldOut = true;
+    //}
+    //public void BuyChest()
+    //{
+    //    if (_soldOut)
+    //    {
+    //        Debug.Log("<color=red>Mejora ya comprada</color>");
+    //        return;
+    //    }
+    //    if (!GameManager.Instance.Player.PayAmount(price))
+    //    {
+    //        Debug.Log("<color=yellow>Dinero insuficiente</color>");
+    //        return;
+    //    }
+    //    GameManager.Instance.Player.UpgradeArmor(Armor.Type.Chestplate);
+    //    _soldOut = true;
+    //}
+    //public void BuyPants()
+    //{
+    //    if (_soldOut)
+    //    {
+    //        Debug.Log("<color=red>Mejora ya comprada</color>");
+    //        return;
+    //    }
+    //    if (!GameManager.Instance.Player.PayAmount(price))
+    //    {
+    //        Debug.Log("<color=yellow>Dinero insuficiente</color>");
+    //        return;
+    //    }
+    //    GameManager.Instance.Player.UpgradeArmor(Armor.Type.Leggings);
+    //    _soldOut = true;
+    //}
 }
