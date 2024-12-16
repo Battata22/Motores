@@ -227,6 +227,7 @@ public class Player : BaseCharacter
         _mesh.SetActive(false);
         _playerMovemente = delegate { };
         inCombat = true;
+        running = false;//if running true while in combat, stamina will not regen
 
         GameManager.Instance.OnCombatEnter -= EnterCombat;
         GameManager.Instance.OnCombatExit += ExitCombat;
