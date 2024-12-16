@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 //TPFinal - Lorenzo Solari.
-public class ArmorPice : ItemComprable, IPickeable
+public class ArmorPice : MonoBehaviour, IPickeable
 
 {
     #region Reemplazado por struct de armor
