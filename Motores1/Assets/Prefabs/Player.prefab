@@ -384,8 +384,13 @@ MonoBehaviour:
   _staminaBar: {fileID: 0}
   dev_damagePlayer: 100
   dev_attackDirection: 0
-  dev_armorEquiped: 000000000100000002000000
-  dev_armorQuality: 030000000300000003000000
+  dev_armor:
+  - type: 0
+    quality: 0
+  - type: 1
+    quality: 0
+  - type: 2
+    quality: 0
 --- !u!136 &1144143577464353677
 CapsuleCollider:
   m_ObjectHideFlags: 0

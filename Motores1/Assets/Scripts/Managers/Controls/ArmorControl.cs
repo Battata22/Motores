@@ -76,15 +76,15 @@ public class ArmorControl
         {
             case Armor.Type.Helmet:
                 _headArmor = (int)armorQuality;
-                Debug.Log($"Casco equipado {_headArmor}");
+                Debug.Log($"Casco equipado {(Armor.Quality)_headArmor}");
                 break;
             case Armor.Type.Chestplate:
                 _chestArmor = (int)armorQuality;
-                Debug.Log($"Pechera equipado {_chestArmor}");
+                Debug.Log($"Pechera equipado {(Armor.Quality)_chestArmor}");
                 break;
             case Armor.Type.Leggings:
                 _legsArmor = (int)armorQuality;
-                Debug.Log($"Pantalones equipado {_legsArmor}");
+                Debug.Log($"Pantalones equipado {(Armor.Quality)_legsArmor}");
                 break;
         }
     }
@@ -111,6 +111,12 @@ public class ArmorControl
                     _legsArmor = (int)Armor.Quality.High;
                 Debug.Log($"Pantalones Mejorado a {(Armor.Quality)_legsArmor}");
                 break;
+        }
+        if(_myOwner == GameManager.Instance.Player)
+        {
+            GameManager.Instance.Player.SavePlayerArmor(Armor.Type.Helmet, (Armor.Quality)_headArmor);
+            GameManager.Instance.Player.SavePlayerArmor(Armor.Type.Chestplate, (Armor.Quality)_chestArmor);
+            GameManager.Instance.Player.SavePlayerArmor(Armor.Type.Leggings, (Armor.Quality)_legsArmor);
         }
     }
 }

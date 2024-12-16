@@ -42,6 +42,10 @@ public class Seller : BaseCharacter, IInteractable
         base.Awake();
         _currentBlockChance = _chanceOfBlock;
         OpenStore += OpenStorage;
+        foreach (var armor in armorEquiped)
+        {
+            SetArmor(armor.type, armor.quality);
+        }
     }
 
     private void Update()

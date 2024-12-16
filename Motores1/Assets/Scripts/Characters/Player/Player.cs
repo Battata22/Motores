@@ -32,8 +32,9 @@ public class Player : BaseCharacter
     [Header("<color=green> Developer test </color>")]
     [SerializeField] float dev_damagePlayer;
     [SerializeField] AttackDirectionList dev_attackDirection;
-    [SerializeField] Armor.Type[] dev_armorEquiped;
-    [SerializeField] Armor.Quality[] dev_armorQuality;
+    [SerializeField] Armor[] dev_armor;
+    //[SerializeField] Armor.Type[] dev_armorEquiped;
+    //[SerializeField] Armor.Quality[] dev_armorQuality;
     bool _inmortal = false;
     protected override void Awake()
     {
@@ -43,9 +44,9 @@ public class Player : BaseCharacter
         if (PlayerPrefs.HasKey("chestQuality"))
             SetArmor(Armor.Type.Chestplate, (Armor.Quality)PlayerPrefs.GetInt("chestQuality"));
         if (PlayerPrefs.HasKey("helmetQuality"))
-            SetArmor(Armor.Type.Chestplate, (Armor.Quality)PlayerPrefs.GetInt("helmetQuality"));
+            SetArmor(Armor.Type.Helmet, (Armor.Quality)PlayerPrefs.GetInt("helmetQuality"));
         if (PlayerPrefs.HasKey("legsQuality"))
-            SetArmor(Armor.Type.Chestplate, (Armor.Quality)PlayerPrefs.GetInt("legsQuality"));
+            SetArmor(Armor.Type.Leggings, (Armor.Quality)PlayerPrefs.GetInt("legsQuality"));
         if (PlayerPrefs.HasKey("money"))
             AddMoney(PlayerPrefs.GetInt("money"));
         
@@ -81,9 +82,9 @@ public class Player : BaseCharacter
         }
         if (Input.GetKeyDown(KeyCode.F2))
         {
-            for (int i = 0; i < dev_armorEquiped.Length; i++)
+            for (int i = 0; i < dev_armor.Length; i++)
             {
-                SetArmor(dev_armorEquiped[i], dev_armorQuality[i]);
+                SetArmor(dev_armor[i].type, dev_armor[i].quality);
             }
         }
         if(Input.GetKeyDown(KeyCode.F3))
@@ -157,6 +158,7 @@ public class Player : BaseCharacter
         Debug.Log($"<color=green> Player Use Potion </color>");
         _myHealthSystem.CalcHeal(ref _hp ,GameManager.Instance.potionHealAmount);
         potions--;
+        PlayerPrefs.SetInt("potions", potions);
         GameManager.Instance.AddToRunStats("Potions Used", 1);
         base.UsePotion();
     }
@@ -201,6 +203,11 @@ public class Player : BaseCharacter
     {
         base.SetArmor(newArmor, newArmorQuality);
         //Guardar Armor Quality
+        SavePlayerArmor(newArmor, newArmorQuality);
+    }
+
+    public void SavePlayerArmor(Armor.Type newArmor, Armor.Quality newArmorQuality)
+    {
         switch (newArmor)
         {
             case Armor.Type.Chestplate:

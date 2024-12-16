@@ -34,6 +34,7 @@ public abstract class BaseCharacter : MonoBehaviour, IKickable
     protected float _lastAttack = -1;
     protected bool _heavyAttack;
     //armor
+    [SerializeField] protected Armor[] armorEquiped;
     //protected int _helmet, _chestPlate, _boots;
 
     //Weapon
@@ -109,7 +110,7 @@ public abstract class BaseCharacter : MonoBehaviour, IKickable
         //Debug.Log($"<color=green>{this.name} </color>| Raw Damage: <color=red>{dmg} </color>| Direccion: <color=cyan>{attackDir} " +
         //    $"</color>| Cuerrent Life <color=#ff00ff> {_hp}</color>");
 
-        Debug.Log($"<color=magenta> {this.name} Recivio Daño </color>");
+        Debug.Log($"<color=magenta> {this.name} Recibio Daño </color>");
         if(_hp < 0 )
         {
             _hp = 0;

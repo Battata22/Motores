@@ -442,6 +442,13 @@ MonoBehaviour:
   _damage: 0
   _baseAttackSpeed: 1
   _currentAtkSpd: 0
+  armorEquiped:
+  - type: 0
+    quality: 0
+  - type: 1
+    quality: 0
+  - type: 2
+    quality: 0
   _currentWeapon: 1
   bleading: 0
   poisoned: 0

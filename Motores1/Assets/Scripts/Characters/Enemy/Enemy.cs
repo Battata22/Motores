@@ -26,6 +26,10 @@ public abstract class Enemy : BaseCharacter
     {
         base.Awake();
         _currentBlockChance = _chanceOfBlock;
+        foreach (var armor in armorEquiped)
+        {
+            SetArmor(armor.type, armor.quality);
+        }
 
     }
 
